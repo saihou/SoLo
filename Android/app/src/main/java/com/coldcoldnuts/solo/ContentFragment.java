@@ -4,12 +4,23 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URISyntaxException;
 import java.util.ArrayList;
+
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 
 /**
@@ -29,6 +40,18 @@ public class ContentFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    // TODO: change mUsername to facebook user name
+    private JSONArray mMessages = new JSONArray();
+    private String mUsername = "Dummy Name";
+    private Socket mSocket;
+    {
+        try {
+            mSocket = IO.socket(Constants.CHAT_SERVER_URL);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private OnFragmentInteractionListener mListener;
 
@@ -61,11 +84,29 @@ public class ContentFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
+        mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
+        mSocket.on("send room message", onNewMessage);
+        mSocket.on("joined room", onJoinRoom);
+        mSocket.on("left room", onLeftRoom);
+        mSocket.connect();
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        // join the room "main_room" in the socket
+        JSONObject newData = new JSONObject();
+        try {
+            newData.put("username", mUsername);
+            newData.put("room", Constants.MAIN_ROOM);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mSocket.emit("join", newData);
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_content, container, false);
 
@@ -74,6 +115,29 @@ public class ContentFragment extends Fragment {
         lv1.setAdapter(new CustomListAdapter(getContext(), image_details));
 
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        mMessages = new JSONArray();
+        JSONObject newData = new JSONObject();
+        try {
+            newData.put("username", mUsername);
+            newData.put("room", Constants.MAIN_ROOM);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mSocket.emit("leave", newData);
+        Log.v("test onDestroy", newData.toString());
+        mSocket.emit("disconnect request");
+        mSocket.disconnect();
+        mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
+        mSocket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
+        mSocket.off("send room message", onNewMessage);
+        mSocket.off("joined room", onJoinRoom);
+        mSocket.off("left room", onLeftRoom);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -150,4 +214,90 @@ public class ContentFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    private Emitter.Listener onConnectError = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getActivity().getApplicationContext(),
+                            R.string.error_connect, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    };
+
+    private Emitter.Listener onNewMessage = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject data = (JSONObject) args[0];
+                    String username;
+                    String message;
+                    String room;
+                    try {
+                        username = data.getString("username");
+                        message = data.getString("message");
+                        room = data.getString("room");
+                    } catch (JSONException e) {
+                        return;
+                    };
+                    JSONObject newMsg = new JSONObject();
+                    try {
+                        newMsg.put("username", username);
+                        newMsg.put("message", message);
+                        mMessages.put(newMsg);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    Log.v("test onNewMessage", mMessages.toString());
+                }
+            });
+        }
+    };
+
+    private Emitter.Listener onJoinRoom = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject data = (JSONObject) args[0];
+                    String username;
+                    String room;
+                    try {
+                        username = data.getString("username");
+                        room = data.getString("room");
+                        mMessages = data.getJSONArray("messages");
+                    } catch (JSONException e) {
+                        return;
+                    }
+                    Log.v("test onJoinRoom", mMessages.toString());
+                }
+            });
+        }
+    };
+
+    private Emitter.Listener onLeftRoom = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject data = (JSONObject) args[0];
+                    String username;
+                    String room;
+                    try {
+                        username = data.getString("username");
+                        room = data.getString("room");
+                    } catch (JSONException e) {
+                        return;
+                    }
+                }
+            });
+        }
+    };
 }
