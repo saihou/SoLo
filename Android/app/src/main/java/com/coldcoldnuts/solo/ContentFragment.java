@@ -131,6 +131,7 @@ public class ContentFragment extends Fragment {
         }
         mSocket.emit("leave", newData);
         Log.v("test onDestroy", newData.toString());
+        Log.v("test onDestroy", mMessages.toString());
         mSocket.emit("disconnect request");
         mSocket.disconnect();
         mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
