@@ -5,10 +5,28 @@
     tools:context="com.coldcoldnuts.solo.SettingsFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="115dp"
-        android:text="@string/hello_settings_fragment"
-        android:layout_gravity="center" />
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:text="@string/hello_settings_fragment"
+            android:layout_gravity="left|top"
+            android:layout_marginTop="15dp"
+            android:id="@+id/labelRadius"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp" />
+
+        <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/sliderRadius"
+            android:layout_below="@+id/labelRadius"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp" />
+    </RelativeLayout>
 
 </FrameLayout>

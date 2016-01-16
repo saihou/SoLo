@@ -20,10 +20,9 @@
 
     <string name="action_settings">Settings</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_content_fragment">Hello content fragment</string>
-    <string name="hello_settings_fragment">Hello settings fragment</string>
-
+    <string name="hello_settings_fragment">Receive notification in a radius of X miles</string>
+    <string name="radius_label">Subscribe to notifications within %s miles</string>
     <!-- when connection to socket is not successful -->
-    <string name="error_connect">Failed to connect</string>
+	<string name="error_connect">Failed to connect</string>
 </resources>

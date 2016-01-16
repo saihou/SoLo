@@ -1,12 +1,15 @@
 package com.coldcoldnuts.solo;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 
 /**
@@ -26,6 +29,8 @@ public class SettingsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private TextView radiusLabel;
+    private SeekBar radiusSlider;
 
     private OnFragmentInteractionListener mListener;
 
@@ -64,7 +69,33 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false);
+        View view = inflater.inflate(R.layout.fragment_settings, container, false);
+
+        radiusLabel = (TextView) view.findViewById(R.id.labelRadius);
+        radiusSlider = (SeekBar) view.findViewById(R.id.sliderRadius);
+
+        radiusSlider.setMax(50);
+        radiusSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                float progressF = progress / 10f;
+
+                Resources res = getResources();
+                String newLabel = String.format(res.getString(R.string.radius_label), Float.toString(progressF));
+                radiusLabel.setText(newLabel);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
