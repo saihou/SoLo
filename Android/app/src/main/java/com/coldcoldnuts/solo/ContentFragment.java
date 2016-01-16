@@ -238,10 +238,12 @@ public class ContentFragment extends Fragment {
                     String username;
                     String message;
                     String room;
+                    String currTime;
                     try {
                         username = data.getString("username");
                         message = data.getString("message");
                         room = data.getString("room");
+                        currTime = data.getString("time");
                     } catch (JSONException e) {
                         return;
                     };
@@ -249,6 +251,7 @@ public class ContentFragment extends Fragment {
                     try {
                         newMsg.put("username", username);
                         newMsg.put("message", message);
+                        newMsg.put("time", currTime);
                         mMessages.put(newMsg);
                     } catch (JSONException e) {
                         e.printStackTrace();

@@ -34,6 +34,7 @@ elif async_mode == 'gevent':
     monkey.patch_all()
 
 import time
+from datetime import datetime as dt
 from threading import Thread
 from flask import Flask, render_template, session, request
 from flask_socketio import SocketIO, emit, join_room, leave_room, \
@@ -78,25 +79,26 @@ def room_message(data):
     room = data['room']
     username = data['username']
     message = data['message']
+    currTime = str(int(time.time()))
 
     # Append the message to the record of this room
     global MESSAGES
-    if room in MESSAGES.keys():
-        MESSAGES[room].append({
+    newJson = {
             'username': username,
-            'message': message
-            })
+            'message': message,
+            'time': currTime
+            }
+    if room in MESSAGES.keys():
+        MESSAGES[room].append(newJson)
     else:
-        MESSAGES[room] = [{
-        'username': username,
-        'message': message
-        }]
+        MESSAGES[room] = [newJson]
 
     # Emit every messages of this room
     emit('send room message', {
         'username': username,
         'room': room,
-        'message': message
+        'message': message,
+        'time': currTime
         },
         room=room)
 
