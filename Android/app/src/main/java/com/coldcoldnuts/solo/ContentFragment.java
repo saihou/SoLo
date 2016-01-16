@@ -7,6 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 
 /**
@@ -64,7 +67,13 @@ public class ContentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_content, container, false);
+        View view = inflater.inflate(R.layout.fragment_content, container, false);
+
+        ArrayList<NewsItem> image_details = getListData();
+        final ListView lv1 = (ListView) view.findViewById(R.id.custom_list);
+        lv1.setAdapter(new CustomListAdapter(getContext(), image_details));
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -90,6 +99,42 @@ public class ContentFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
+    private ArrayList<NewsItem> getListData() {
+        ArrayList<NewsItem> results = new ArrayList<NewsItem>();
+        NewsItem newsData = new NewsItem();
+        newsData.setHeadline("Dance of Democracy");
+        newsData.setReporterName("Pankaj Gupta");
+        results.add(newsData);
+
+        newsData = new NewsItem();
+        newsData.setHeadline("Major Naxal attacks in the past");
+        newsData.setReporterName("Pankaj Gupta");
+        results.add(newsData);
+
+        newsData = new NewsItem();
+        newsData.setHeadline("BCCI suspends Gurunath pending inquiry ");
+        newsData.setReporterName("Rajiv Chandan");
+        results.add(newsData);
+
+        newsData = new NewsItem();
+        newsData.setHeadline("Life convict can`t claim freedom after 14 yrs: SC");
+        newsData.setReporterName("Pankaj Gupta");
+        results.add(newsData);
+
+        newsData = new NewsItem();
+        newsData.setHeadline("Indian Army refuses to share info on soldiers mutilated at LoC");
+        newsData.setReporterName("Pankaj Gupta");
+        results.add(newsData);
+
+        newsData = new NewsItem();
+        newsData.setHeadline("French soldier stabbed; link to Woolwich attack being probed");
+        newsData.setReporterName("Sudeep Nanda");
+        results.add(newsData);
+
+        return results;
+    }
+
 
     /**
      * This interface must be implemented by activities that contain this
