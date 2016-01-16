@@ -60,6 +60,7 @@ def join(data):
     # Initialize the record for this room if room is new
     global MESSAGES
     if room not in MESSAGES.keys():
+        print('hey')
         MESSAGES[room] = []
 
     # Emit every messages
@@ -69,6 +70,7 @@ def join(data):
         'messages': MESSAGES[room]
         },
         room=room)
+    print MESSAGES[room]
 
 # New message in a room
 @socketio.on('room message', namespace='/solo')
@@ -80,9 +82,15 @@ def room_message(data):
     # Append the message to the record of this room
     global MESSAGES
     if room in MESSAGES.keys():
-        MESSAGES[room].append(message)
+        MESSAGES[room].append({
+            'username': username,
+            'message': message
+            })
     else:
-        MESSAGES[room] = [message]
+        MESSAGES[room] = [{
+        'username': username,
+        'message': message
+        }]
 
     # Emit every messages of this room
     emit('send room message', {

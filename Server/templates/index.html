@@ -16,12 +16,12 @@
             // event handler for server sent data
             // the data is displayed in the "Received" section of the page
             socket.on('joined room', function(msg) {
-                if (typeof msg.message === 'undefined') {
+                if (typeof msg.messages === 'undefined') {
                     $('#log').append('<br>' + $('<div/>').text(msg.username + ' joined the room "' + msg.room + '"!').html());
                 } else {
                     $('#log').append('<br>' + $('<div/>').text(msg.username + ' joined the room "' + msg.room + '"!').html());
-                    for (var i = msg.message.length - 1; i >= 0; i--) {
-                        $('#log').append('<br>' + $('<div/>').text(msg.username + ': ' + msg.messages[i]).html());
+                    for (var i = 0; i < msg.messages.length; i++) {
+                        $('#log').append('<br>' + $('<div/>').text(msg.messages[i].username + ': ' + msg.messages[i].message).html());
                     };
                 };
             });
