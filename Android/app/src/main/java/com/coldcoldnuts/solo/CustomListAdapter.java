@@ -1,7 +1,5 @@
 package com.coldcoldnuts.solo;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -41,21 +39,22 @@ public class CustomListAdapter extends BaseAdapter {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+        final ViewHolder holder;
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.list_row_layout, null);
             holder = new ViewHolder();
             holder.headlineView = (TextView) convertView.findViewById(R.id.title);
             holder.reporterNameView = (TextView) convertView.findViewById(R.id.reporter);
             holder.reportedChatroomBtn = (TextView) convertView.findViewById(R.id.chatroom_btn);
+            holder.date = (TextView) convertView.findViewById(R.id.date);
 
             holder.reportedChatroomBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, DetailsActivity.class);
-//                    intent.putExtra("message", holder.headlineView.getText());
-//                    intent.putExtra("time", );
-//                    intent.putExtra("name", holder.reporterNameView.getText());
+                    intent.putExtra("message", holder.headlineView.getText());
+                    intent.putExtra("time", holder.date.getText());
+                    intent.putExtra("name", holder.reporterNameView.getText());
                     context.startActivity(intent);
                 }
             });
@@ -66,7 +65,7 @@ public class CustomListAdapter extends BaseAdapter {
 
         holder.headlineView.setText(listData.get(position).getHeadline());
         holder.reporterNameView.setText("By, " + listData.get(position).getReporterName());
-        holder.reportedChatroomBtn.setText(listData.get(position).getDate());
+        holder.date.setText(listData.get(position).getDate());
         return convertView;
     }
 
@@ -74,5 +73,6 @@ public class CustomListAdapter extends BaseAdapter {
         TextView headlineView;
         TextView reporterNameView;
         TextView reportedChatroomBtn;
+        TextView date;
     }
 }

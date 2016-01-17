@@ -43,6 +43,10 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
+        mInitiator = getIntent().getStringExtra("name");
+        mQuestion = getIntent().getStringExtra("message");
+        mTime = getIntent().getStringExtra("time");
+
         mMessages = new ArrayList<NewsItem>();
 
         // TODO: get all the variables from Intent and set the variables above

@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -36,8 +38,15 @@ public class MainActivity extends AppCompatActivity
         navigationView.setCheckedItem(R.id.nav_feed);
         ContentFragment fragment = new ContentFragment();
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.frame,fragment);
+        fragmentTransaction.replace(R.id.frame, fragment);
         fragmentTransaction.commit();
+
+        //update username in drawer
+        TextView user = (TextView) navigationView.getHeaderView(0).findViewById(R.id.drawer_name);
+        user.setText(Utils.getUsername());
+
+        ImageView pic = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.drawer_picture);
+        pic.setImageURI(Utils.getPicture());
     }
 
     @Override
