@@ -56,4 +56,14 @@
         android:layout_alignTop="@+id/imageView"
         android:layout_centerHorizontal="true"
         android:visibility="invisible"/>
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="80dp"
+        android:id="@+id/detail_profile"
+        android:src="@drawable/avatar_placeholder"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="30dp"/>
 </RelativeLayout>
