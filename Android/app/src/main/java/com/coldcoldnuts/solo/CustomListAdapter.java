@@ -51,7 +51,7 @@ public class CustomListAdapter extends BaseAdapter {
             holder.date = (TextView) convertView.findViewById(R.id.date);
 
             ImageView background = (ImageView) convertView.findViewById(R.id.imageView);
-            //setRandomBackground(background);
+            setRandomBackground(background);
 
             ImageView profile = (ImageView) convertView.findViewById(R.id.profile_picture);
             Resources res = context.getResources();
@@ -87,11 +87,11 @@ public class CustomListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void setRandomBackground(ImageView bg) {
-        int rdm = (int) Math.round(Math.random() * 2.0f);
+    public static void setRandomBackground(ImageView bg) {
+        int rdm = (int) Math.round(Math.random() * 5.0f);
         switch (rdm) {
             case 0:
-                bg.setBackgroundResource(R.drawable.ferry_building);
+                bg.setBackgroundResource(R.drawable.cafe);
                 break;
             case 1:
                 bg.setBackgroundResource(R.drawable.golden_gate);
@@ -103,13 +103,10 @@ public class CustomListAdapter extends BaseAdapter {
                 bg.setBackgroundResource(R.drawable.ferry_building);
                 break;
             case 4:
-                bg.setBackgroundResource(R.drawable.cafe);
-                break;
-            case 5:
                 bg.setBackgroundResource(R.drawable.houses);
                 break;
-            case 6:
-                bg.setBackgroundResource(R.drawable.palace_of_finearts);
+            case 5:
+                bg.setBackgroundResource(R.drawable.chinatown);
                 break;
         }
     }

@@ -51,6 +51,9 @@ public class DetailsCustomListAdapter extends BaseAdapter {
             holder.reportedChatroomBtn = (TextView) convertView.findViewById(R.id.details_chatroom_btn);
             holder.date = (TextView) convertView.findViewById(R.id.details_date);
 
+            ImageView background = (ImageView) convertView.findViewById(R.id.details_imageView);
+            CustomListAdapter.setRandomBackground(background);
+
             ImageView detail_profile = (ImageView) convertView.findViewById(R.id.detail_profile);
             Resources res = context.getResources();
 
