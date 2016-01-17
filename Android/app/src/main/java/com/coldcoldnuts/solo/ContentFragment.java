@@ -8,7 +8,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -40,12 +43,11 @@ public class ContentFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private CustomListAdapter mAdapter;
 
-    // TODO: change mUsername to facebook user name
-    private JSONArray mMessages = new JSONArray();
-    private ArrayList<NewsItem> image_details;
-    private String mUsername = "Dummy Name";
+    private CustomListAdapter mAdapter;
+    private ArrayList<NewsItem> mMessages;
+    private String mUsername =  Utils.getUsername();
+    private String mRoomName;
     private Socket mSocket;
     {
         try {
@@ -83,7 +85,8 @@ public class ContentFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        image_details = new ArrayList<NewsItem>();
+        mMessages = new ArrayList<NewsItem>();
+        mRoomName = Constants.MAIN_ROOM;
 
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -100,7 +103,7 @@ public class ContentFragment extends Fragment {
         JSONObject newData = new JSONObject();
         try {
             newData.put("username", mUsername);
-            newData.put("room", Constants.MAIN_ROOM);
+            newData.put("room", mRoomName);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -116,9 +119,30 @@ public class ContentFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_content, container, false);
 
         final ListView lv1 = (ListView) view.findViewById(R.id.custom_list);
-        mAdapter = new CustomListAdapter(getContext(), image_details);
+        mAdapter = new CustomListAdapter(getContext(), mMessages);
         lv1.setAdapter(mAdapter);
-        Log.v("test populate", "i'm here");
+
+        TextView sendNewPost = (TextView) view.findViewById(R.id.newpost_send);
+        final EditText newPost = (EditText) view.findViewById(R.id.newpost_text);
+        sendNewPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newPostText = newPost.getText().toString();
+                JSONObject confirmPost = new JSONObject();
+                try {
+                    confirmPost.put("username", mUsername);
+                    confirmPost.put("room", mRoomName);
+                    confirmPost.put("message", newPostText);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                mSocket.emit("room message", confirmPost);
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(newPost.getWindowToken(), 0);
+                newPost.setText("");
+            }
+        });
+
 
         return view;
     }
@@ -127,17 +151,16 @@ public class ContentFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
 
-        mMessages = new JSONArray();
+        mMessages = new ArrayList<NewsItem>();
         JSONObject newData = new JSONObject();
         try {
             newData.put("username", mUsername);
-            newData.put("room", Constants.MAIN_ROOM);
+            newData.put("room", mRoomName);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         mSocket.emit("leave", newData);
         Log.v("test onDestroy", newData.toString());
-        Log.v("test onDestroy", mMessages.toString());
         mSocket.emit("disconnect request");
         mSocket.disconnect();
         mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
@@ -171,17 +194,17 @@ public class ContentFragment extends Fragment {
         mListener = null;
     }
 
-    private void populate() {
-        int arrSize = mMessages.length();
+    private void populate(JSONArray msgHistory) {
+        int arrSize = msgHistory.length();
         for (int i = 0; i < arrSize; i++) {
             try {
-                JSONObject post = mMessages.getJSONObject(i);
+                JSONObject post = msgHistory.getJSONObject(i);
                 String message = post.getString("message");
                 String user = post.getString("username");
                 NewsItem newsData = new NewsItem();
                 newsData.setHeadline(message);
                 newsData.setReporterName(user);
-                image_details.add(0, newsData);
+                mMessages.add(0, newsData);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -194,7 +217,7 @@ public class ContentFragment extends Fragment {
         try {
             newsData.setHeadline(newMsg.getString("message"));
             newsData.setReporterName(newMsg.getString("username"));
-            image_details.add(0, newsData);
+            mMessages.add(0, newsData);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -250,7 +273,7 @@ public class ContentFragment extends Fragment {
                         return;
                     }
 
-                    if (!room.equals(Constants.MAIN_ROOM)) {
+                    if (!room.equals(mRoomName)) {
                         Log.e("DetailsActivity", "Wrong Room!!");
                         return;
                     }
@@ -260,11 +283,10 @@ public class ContentFragment extends Fragment {
                         newMsg.put("username", username);
                         newMsg.put("message", message);
                         newMsg.put("time", currTime);
-                        mMessages.put(newMsg);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    Log.v("test onNewMessage", mMessages.toString());
+                    Log.v("test onNewMessage", newMsg.toString());
                     addMsg(newMsg);
                 }
             });
@@ -280,15 +302,16 @@ public class ContentFragment extends Fragment {
                     JSONObject data = (JSONObject) args[0];
                     String username;
                     String room;
+                    JSONArray msgHistory;
                     try {
                         username = data.getString("username");
                         room = data.getString("room");
-                        mMessages = data.getJSONArray("messages");
+                        msgHistory = data.getJSONArray("messages");
                     } catch (JSONException e) {
                         return;
                     }
-                    Log.v("test onJoinRoom", mMessages.toString());
-                    populate();
+                    Log.v("test onJoinRoom", msgHistory.toString());
+                    populate(msgHistory);
                 }
             });
         }
