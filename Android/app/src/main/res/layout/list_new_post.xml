@@ -1,48 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="5dp"
-    android:background="#FFFFFF">
+    android:background="#FFFFFF"
+    android:orientation="vertical">
 
-<ImageView
-    android:layout_width="wrap_content"
-    android:layout_height="120dp"
-    android:background="@drawable/newpost_bg"
-    android:scaleType="fitXY"
-    android:adjustViewBounds="true"
-    android:id="@+id/newpost_image"
-    android:elevation="4dp"
-    android:layout_margin="8dp"/>
+    <ImageView
+        android:id="@+id/newpost_image"
+        android:layout_width="wrap_content"
+        android:layout_height="110dp"
+        android:adjustViewBounds="true"
+        android:background="@drawable/scalable_textviewbg"
+        android:elevation="4dp"
+        android:scaleType="fitXY"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp" />
 
     <EditText
         android:id="@+id/newpost_text"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:hint="Where should I go for lunch?"
-        android:background="#99FFFFFF"
-        android:gravity="center_vertical"
-        android:layout_margin="18dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:elevation="10dp"/>
+        android:layout_margin="18dp"
+        android:background="#99FFFFFF"
+        android:elevation="10dp"
+        android:gravity="center_vertical"
+        android:hint="Where should I go for lunch?"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp" />
 
-    <TextView
-    android:id="@+id/newpost_send"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:padding="5dp"
-        android:text = "Post"
-    android:textSize="18dp"
-    android:textColor="#FFFFFF"
-    android:background="#3B5998"
-        android:layout_below="@+id/newpost_text"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/newpost_send"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignRight="@+id/newpost_text"
-        android:layout_alignEnd="@+id/newpost_text"
-        android:elevation="20dp"/>
+        android:layout_below="@+id/newpost_text"
+        android:elevation="20dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_add_white_24dp"/>
 
 
 </RelativeLayout>
