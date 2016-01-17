@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="#FFFFFF"
     tools:context="com.coldcoldnuts.solo.ContentFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -26,7 +26,12 @@
             <ListView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/custom_list" />
+                android:layout_margin="5dp"
+                    android:id="@+id/custom_list"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="10.0sp"
+                android:padding="10dip"
+                android:clipToPadding="false"/>
 
         </android.support.v4.widget.SwipeRefreshLayout>
 
