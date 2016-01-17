@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent">
+
+<ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="120dp"
+    android:alpha="0.6"
+    android:background="@drawable/newpost_bg"
+    android:scaleType="fitXY"
+    android:adjustViewBounds="true"
+    android:id="@+id/newpost_image" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="20dp"
+        android:padding="5dp"
+        android:id="@+id/newpost_text"
+        android:text="Where should I go for lunch?"
+        android:background="#FFFFFF" />
+
+    <TextView
+    android:id="@+id/newpost_send"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:drawableRight="@drawable/ic_email_outline"
+    android:layout_alignBottom="@+id/newpost_image"
+    android:layout_alignParentRight="true"
+    android:layout_alignParentEnd="true" />
+
+
+</RelativeLayout>
