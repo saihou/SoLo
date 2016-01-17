@@ -1,27 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@drawable/chat_border"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
     tools:context="com.coldcoldnuts.solo.ChatActivity">
 
-    <EditText
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:padding="5dp"
-        android:id="@+id/newpost_text"
-        android:hint="Where should I go for lunch?"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/date"
+        <include layout="@layout/list_chat_box"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableRight="@drawable/ic_email_outline"
-            android:layout_centerVertical="true"
-            android:layout_alignRight="@+id/newpost_text"
-            android:layout_alignEnd="@+id/newpost_text" />
+            android:id="@+id/include"
+            />
 
-</RelativeLayout>
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/custom_list_chat"/>
+
+    </RelativeLayout>
+
+</FrameLayout>
