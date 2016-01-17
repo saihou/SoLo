@@ -69,7 +69,7 @@ public class DetailsCustomListAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     Intent intent = new Intent(context, ChatActivity.class);
                     intent.putExtra("message", holder.messageView.getText());
-                    intent.putExtra("reporter_name", holder.reporterNameView.getText());
+                    intent.putExtra("reporter_name", holder.reporterNameView.getText().toString().substring(4));
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                 }
