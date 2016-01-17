@@ -36,7 +36,8 @@
             android:layout_below="@+id/intro_to_chat"
             android:layout_above="@+id/chat_text"
             android:transcriptMode="alwaysScroll"
-            android:divider="#FFCC00"/>
+            android:divider="#FFFFFF"
+            android:dividerHeight="5dp"/>
 
         <EditText
             android:layout_width="match_parent"
