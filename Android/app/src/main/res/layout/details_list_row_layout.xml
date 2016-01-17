@@ -8,7 +8,7 @@
 
 <ImageView
     android:layout_width="wrap_content"
-    android:layout_height="100dp"
+    android:layout_height="75dp"
     android:alpha="0.8"
     android:background="@drawable/textview_bg"
     android:scaleType="fitXY"
@@ -23,29 +23,32 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textColor="#FFFFFF"
-    android:padding="10dp"
+    android:padding="5dp"
     android:textStyle="bold"
     android:typeface="sans"
-    android:layout_marginLeft="110dp" />
+    android:textSize="20sp"
+    android:layout_alignTop="@+id/details_imageView"
+    android:layout_alignLeft="@+id/details_imageView"
+    android:layout_alignStart="@+id/details_imageView" />
 
 <TextView
     android:id="@+id/details_reporter"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_below="@id/details_title"
-    android:layout_marginTop="5dip"
     android:textColor="#FFFFFF"
     android:padding="5dp"
-    android:textSize="20sp"
-    android:layout_marginLeft="110dp" />
+    android:textSize="15sp"
+    android:layout_alignTop="@+id/details_chatroom_btn"
+    android:layout_alignLeft="@+id/details_imageView"
+    android:layout_alignStart="@+id/details_imageView" />
 
 <TextView
     android:id="@+id/details_chatroom_btn"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginRight="10dp"
     android:drawableRight="@drawable/ic_email_outline"
-    android:layout_alignBottom="@+id/detail_profile"
+    android:padding="5dp"
+    android:layout_alignBottom="@+id/details_imageView"
     android:layout_alignRight="@+id/details_imageView"
     android:layout_alignEnd="@+id/details_imageView" />
 
@@ -62,10 +65,9 @@
         android:layout_width="60dp"
         android:layout_height="80dp"
         android:id="@+id/detail_profile"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
         android:src="@drawable/avatar_placeholder"
-        android:layout_below="@+id/details_date"
+        android:layout_alignTop="@+id/details_imageView"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:paddingBottom="5dp"/>
 </RelativeLayout>
