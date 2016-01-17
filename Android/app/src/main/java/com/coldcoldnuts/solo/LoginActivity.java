@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ScrollView;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -64,7 +65,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-
+                Utils.setFacebookDetails();
+                Intent launchMainPage = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(launchMainPage);
+                finish();
             }
 
             @Override
@@ -80,6 +84,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mEmailView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    ScrollView scroll = (ScrollView) mLoginFormView;
+                    scroll.fullScroll(View.FOCUS_DOWN);
+                }
+            }
+        });
+
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -260,6 +274,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
+                Utils.setGuestDetails(mEmail);
                 Intent launchMainPage = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(launchMainPage);
                 finish();
