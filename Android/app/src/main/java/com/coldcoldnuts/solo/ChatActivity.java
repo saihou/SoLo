@@ -1,8 +1,15 @@
 package com.coldcoldnuts.solo;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -17,6 +24,8 @@ import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
 public class ChatActivity extends AppCompatActivity {
+
+    private ChatCustomListAdapter mAdapter;
 
     // TODO: edit these variables and get the value from Intent
     private String mOtherUser = "from_detail"; // name of the other user of this private chat
@@ -40,9 +49,21 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        getSupportActionBar().hide();
+
+        mUsername = Utils.getUsername();
+        mOtherUser = getIntent().getStringExtra("reporter_name");
+        String topic = getIntent().getStringExtra("message");
+        TextView intro = (TextView) findViewById(R.id.intro_to_chat);
+        intro.setText("Welcome to the private chat! Your last topic is \"" + topic + "\".");
+        TextView title = (TextView) findViewById(R.id.chat_other_person);
+        title.setText(mOtherUser);
+
         mMessages = new ArrayList<NewsItem>();
 
-        // TODO: get all the variables from Intent and set the variables above
+        ListView lv = (ListView) findViewById(R.id.custom_list_chat);
+        mAdapter = new ChatCustomListAdapter(getApplicationContext(), mMessages);
+        lv.setAdapter(mAdapter);
 
         // Gives the room a name
         // To ensure the room name between 2 users is always the same
@@ -53,6 +74,31 @@ public class ChatActivity extends AppCompatActivity {
         } else {
             mRoomName = mOtherUser + "_" + mUsername;
         }
+
+        final EditText post_reply = (EditText) findViewById(R.id.chat_text);
+        FloatingActionButton sendBtn = (FloatingActionButton) findViewById(R.id.chat_send);
+        sendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String reply = post_reply.getText().toString();
+                if (reply.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Enter a longer reply! Do not spam short replies", Toast.LENGTH_LONG);
+                } else {
+                    JSONObject confirmPost = new JSONObject();
+                    try {
+                        confirmPost.put("username", mUsername);
+                        confirmPost.put("room", mRoomName);
+                        confirmPost.put("message", reply);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    mSocket.emit("room message", confirmPost);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(post_reply.getWindowToken(), 0);
+                    post_reply.setText("");
+                }
+            }
+        });
 
         mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
         mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
@@ -112,13 +158,13 @@ public class ChatActivity extends AppCompatActivity {
                 newsData.setHeadline(message);
                 newsData.setReporterName(user);
                 newsData.setDate(currTime);
-                mMessages.add(0, newsData);
+                mMessages.add(newsData);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
         // TODO: implement Adapter
-        //mAdapter.notifyDataSetChanged();
+        mAdapter.notifyDataSetChanged();
     }
 
     private void addMsg(JSONObject newMsg) {
@@ -127,12 +173,12 @@ public class ChatActivity extends AppCompatActivity {
             newsData.setHeadline(newMsg.getString("message"));
             newsData.setReporterName(newMsg.getString("username"));
             newsData.setDate(newMsg.getString("time"));
-            mMessages.add(0, newsData);
+            mMessages.add(newsData);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         // TODO: implement Adapter
-        //mAdapter.notifyDataSetChanged();
+        mAdapter.notifyDataSetChanged();
     }
 
 

@@ -95,6 +95,8 @@ public class ContentFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+        Log.v("mainFragment", "create");
+
     }
 
     @Override
@@ -117,6 +119,8 @@ public class ContentFragment extends Fragment {
             e.printStackTrace();
         }
         mSocket.emit("join", newData);
+
+        Log.v("mainFragment", "start");
     }
 
     @Override
@@ -191,11 +195,20 @@ public class ContentFragment extends Fragment {
         mSocket.off("send room message", onNewMessage);
         mSocket.off("joined room", onJoinRoom);
         mSocket.off("left room", onLeftRoom);
+
+        Log.v("mainFragment", "paused");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.v("mainFragment", "stop");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.v("mainFragment", "destroyed");
 
     }
 
@@ -225,51 +238,36 @@ public class ContentFragment extends Fragment {
 
     // helper function to populate view with history
     private void populate(JSONArray msgHistory) {
-        Log.v("test on populate", "step 1");
         int arrSize = msgHistory.length();
         for (int i = 0; i < arrSize; i++) {
             try {
-                Log.v("test on populate", "step 2.1");
                 JSONObject post = msgHistory.getJSONObject(i);
                 String message = post.getString("message");
                 String user = post.getString("username");
                 String currTime = post.getString("time");
-                Log.v("test on populate", "step 2.2");
                 NewsItem newsData = new NewsItem();
                 newsData.setHeadline(message);
                 newsData.setReporterName(user);
                 newsData.setDate(currTime);
                 mMessages.add(0, newsData);
-                Log.v("test on populate", "step 2.3");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }
-        Log.v("test on populate", "step 3");
-        for (int i = 0; i < mMessages.size(); i++) {
-            Log.v("test on populate", mMessages.get(i).getHeadline());
         }
         mAdapter.notifyDataSetChanged();
     }
 
     // helper function to populate view with new message
     private void addMsg(JSONObject newMsg) {
-        Log.v("test onAddMsg", "step 1");
         NewsItem newsData = new NewsItem();
         try {
             newsData.setHeadline(newMsg.getString("message"));
             newsData.setReporterName(newMsg.getString("username"));
             newsData.setDate(newMsg.getString("time"));
             mMessages.add(0, newsData);
-            Log.v("test onAddMsg", "step 2");
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.v("test onAddMsg", "step 3");
-        for (int i = 0; i < mMessages.size(); i++) {
-            Log.v("test onAddMsg", mMessages.get(i).getHeadline());
-        }
-        Log.v("test onAddMsg", "step 4");
         mAdapter.notifyDataSetChanged();
     }
 

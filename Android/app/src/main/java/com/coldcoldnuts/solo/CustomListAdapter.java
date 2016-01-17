@@ -2,6 +2,7 @@ package com.coldcoldnuts.solo;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +51,20 @@ public class CustomListAdapter extends BaseAdapter {
             holder.date = (TextView) convertView.findViewById(R.id.date);
 
             ImageView background = (ImageView) convertView.findViewById(R.id.imageView);
-            //setRandomBackground(background);
+            setRandomBackground(background);
+
+            ImageView profile = (ImageView) convertView.findViewById(R.id.profile_picture);
+            Resources res = context.getResources();
+
+            int resourceIdMale = res.getIdentifier(
+                    "avatar_male", "drawable", context.getPackageName());
+            int resourceIdFemale = res.getIdentifier(
+                    "avatar_female", "drawable", context.getPackageName() );
+            if (listData.get(position).getReporterName().equals("Jack Ong")) {
+                profile.setImageResource(resourceIdMale);
+            } else {
+                profile.setImageResource(resourceIdFemale);
+            }
 
             holder.reportedChatroomBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -58,7 +72,7 @@ public class CustomListAdapter extends BaseAdapter {
                     Intent intent = new Intent(context, DetailsActivity.class);
                     intent.putExtra("message", holder.headlineView.getText());
                     intent.putExtra("time", holder.date.getText());
-                    intent.putExtra("name", holder.reporterNameView.getText());
+                    intent.putExtra("name", holder.reporterNameView.getText().toString().substring(4));
                     context.startActivity(intent);
                 }
             });
@@ -73,11 +87,11 @@ public class CustomListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void setRandomBackground(ImageView bg) {
-        int rdm = (int) Math.round(Math.random() * 2.0f);
+    public static void setRandomBackground(ImageView bg) {
+        int rdm = (int) Math.round(Math.random() * 5.0f);
         switch (rdm) {
             case 0:
-                bg.setBackgroundResource(R.drawable.ferry_building);
+                bg.setBackgroundResource(R.drawable.cafe);
                 break;
             case 1:
                 bg.setBackgroundResource(R.drawable.golden_gate);
@@ -89,13 +103,10 @@ public class CustomListAdapter extends BaseAdapter {
                 bg.setBackgroundResource(R.drawable.ferry_building);
                 break;
             case 4:
-                bg.setBackgroundResource(R.drawable.cafe);
-                break;
-            case 5:
                 bg.setBackgroundResource(R.drawable.houses);
                 break;
-            case 6:
-                bg.setBackgroundResource(R.drawable.palace_of_finearts);
+            case 5:
+                bg.setBackgroundResource(R.drawable.chinatown);
                 break;
         }
     }

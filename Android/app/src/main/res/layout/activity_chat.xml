@@ -4,11 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
-    tools:context="com.coldcoldnuts.solo.ChatActivity">
+    tools:context="com.coldcoldnuts.solo.ChatActivity"
+    android:focusableInTouchMode="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#000000"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        >
 
         <include layout="@layout/list_chat_box"
             android:layout_width="wrap_content"
@@ -16,10 +23,41 @@
             android:id="@+id/include"
             />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/intro_to_chat"
+            android:layout_below="@+id/include"/>
+
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/custom_list_chat"/>
+            android:id="@+id/custom_list_chat"
+            android:layout_below="@+id/intro_to_chat"
+            android:layout_above="@+id/chat_text"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/chat_text"
+            android:hint="Type a message"
+            android:background="#FFFFFF"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/chat_send"
+            android:layout_toStartOf="@+id/chat_send"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:padding="15dp"
+            android:textSize="18sp"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/chat_send"
+            android:src="@drawable/ic_send_white_24dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
 
