@@ -16,18 +16,22 @@
     <EditText
         android:id="@+id/newpost_text"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="20dp"
+        android:layout_height="120dp"
         android:padding="5dp"
+        android:layout_margin="15dp"
         android:hint="Where should I go for lunch?"
-        android:background="#99FFFFFF" />
+        android:background="#99FFFFFF"
+        android:layout_alignBottom="@+id/newpost_image"
+        android:gravity="center_vertical"
+        android:layout_centerHorizontal="true" />
 
     <TextView
     android:id="@+id/newpost_send"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:drawableRight="@drawable/ic_add_circle_outline_white_24dp"
-        android:layout_below="@+id/newpost_text"
+    android:drawableRight="@drawable/ic_add_circle_white_36dp"
+        android:padding="2dp"
+        android:layout_alignBottom="@+id/newpost_text"
         android:layout_alignRight="@+id/newpost_text"
         android:layout_alignEnd="@+id/newpost_text" />
 
