@@ -65,7 +65,7 @@ public class DetailsCustomListAdapter extends BaseAdapter {
                 //profile.setImageResource(resourceIdMale);
                 detail_profile.setImageResource(resourceIdMale);
             } else {
-                profile.setImageResource(resourceIdFemale);
+                // profile.setImageResource(resourceIdFemale);
                 detail_profile.setImageResource(resourceIdFemale);
             }
 
