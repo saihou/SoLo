@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="#FFFFFF"
     tools:context="com.coldcoldnuts.solo.ContentFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -10,23 +10,35 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#FFFFFF"
         android:focusableInTouchMode="true">
 
         <include layout="@layout/list_new_post"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:id="@+id/include" />
+            android:id="@+id/include"
+            android:background="#FFFFFF" />
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/refresh"
-            android:layout_below="@+id/include">
+            android:layout_below="@+id/include"
+            android:layout_marginTop="10dp"
+            android:background="#FFFFFF"
+            >
 
             <ListView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/custom_list" />
+                    android:id="@+id/custom_list"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:dividerHeight="8dp"
+                    android:background="#FFFFFF"
+                />
 
         </android.support.v4.widget.SwipeRefreshLayout>
 
