@@ -4,8 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:layout_margin="5dp"
-    android:dividerHeight="10.0sp"
-    android:background="#FFFFFF">
+    android:dividerHeight="10.0sp">
 
 <ImageView
     android:layout_width="wrap_content"
@@ -15,9 +14,9 @@
     android:scaleType="fitXY"
     android:adjustViewBounds="true"
     android:id="@+id/details_imageView"
-    android:layout_marginLeft="100dp"
-    android:layout_marginTop="5dp"
-    android:layout_marginBottom="5dp"/>
+    android:layout_margin="5dp"
+    android:layout_toRightOf="@+id/detail_profile"
+    android:layout_toEndOf="@+id/detail_profile" />
 
 <TextView
     android:id="@+id/details_title"
@@ -44,11 +43,9 @@
     android:id="@+id/details_chatroom_btn"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_marginRight="10dp"
     android:drawableRight="@drawable/ic_email_outline"
-    android:layout_marginRight="22dp"
-    android:layout_marginEnd="22dp"
-    android:layout_marginBottom="5dp"
-    android:layout_below="@+id/details_reporter"
+    android:layout_alignBottom="@+id/detail_profile"
     android:layout_alignRight="@+id/details_imageView"
     android:layout_alignEnd="@+id/details_imageView" />
 
@@ -65,9 +62,10 @@
         android:layout_width="60dp"
         android:layout_height="80dp"
         android:id="@+id/detail_profile"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:src="@drawable/avatar_placeholder"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/details_date"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="30dp"/>
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

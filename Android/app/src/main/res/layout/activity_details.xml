@@ -21,6 +21,7 @@
         android:id="@+id/details_custom_list"
         android:layout_above="@+id/post_reply"
         android:transcriptMode="alwaysScroll"
+        android:divider="#FFCC00"
         android:layout_marginBottom="15dp"></ListView>
 
     <EditText
