@@ -84,7 +84,8 @@ public class DetailsActivity extends AppCompatActivity {
                 "avatar_male", "drawable", getPackageName());
         int resourceIdFemale = res.getIdentifier(
                 "avatar_female", "drawable", getPackageName() );
-        if (mInitiator.equals("By, Jack Ong")) {
+        Log.v("checkview", mInitiator);
+        if (mInitiator.equals("Jack Ong")) {
             //profile.setImageResource(resourceIdMale);
             profile.setImageResource(resourceIdMale);
         } else {
