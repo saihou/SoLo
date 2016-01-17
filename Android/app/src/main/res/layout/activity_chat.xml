@@ -34,7 +34,8 @@
             android:layout_height="match_parent"
             android:id="@+id/custom_list_chat"
             android:layout_below="@+id/intro_to_chat"
-            android:layout_above="@+id/chat_text"/>
+            android:layout_above="@+id/chat_text"
+            android:transcriptMode="alwaysScroll"/>
 
         <EditText
             android:layout_width="match_parent"
