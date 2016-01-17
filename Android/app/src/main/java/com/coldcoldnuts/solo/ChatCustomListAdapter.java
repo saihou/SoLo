@@ -1,7 +1,6 @@
 package com.coldcoldnuts.solo;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,10 +59,10 @@ public class ChatCustomListAdapter extends BaseAdapter {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.FILL_PARENT);
         if (isMine(holder.nameView.getText().toString().trim())) {
             params.gravity = Gravity.RIGHT;
-            holder.messageView.setBackgroundResource(R.drawable.speech_bubble_green);
+            holder.messageView.setBackgroundResource(R.drawable.speech_bubble_from_me);
         } else {
             params.gravity = Gravity.LEFT;
-            holder.messageView.setBackgroundResource(R.drawable.speech_bubble_orange);
+            holder.messageView.setBackgroundResource(R.drawable.speech_bubble_from_others);
         }
         holder.messageView.setLayoutParams(params);
 
@@ -72,7 +71,6 @@ public class ChatCustomListAdapter extends BaseAdapter {
     }
 
     private boolean isMine(String username) {
-        Log.d("HIHIHIHIHIHI", Utils.getUsername() + " " + username);
         return Utils.getUsername().equals(username);
     }
 

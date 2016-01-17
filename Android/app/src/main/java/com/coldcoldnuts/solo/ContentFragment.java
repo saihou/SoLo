@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -13,7 +14,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -148,7 +148,7 @@ public class ContentFragment extends Fragment {
         mAdapter = new CustomListAdapter(getContext(), mMessages);
         lv1.setAdapter(mAdapter);
 
-        TextView sendNewPost = (TextView) view.findViewById(R.id.newpost_send);
+        FloatingActionButton sendNewPost = (FloatingActionButton) view.findViewById(R.id.newpost_send);
         final EditText newPost = (EditText) view.findViewById(R.id.newpost_text);
         sendNewPost.setOnClickListener(new View.OnClickListener() {
             @Override
