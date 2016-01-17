@@ -20,6 +20,8 @@ public class DetailsCustomListAdapter extends BaseAdapter {
     private LayoutInflater layoutInflater;
     private Context context;
 
+    public DetailsCustomListAdapter(){super();};
+
     public DetailsCustomListAdapter(Context aContext, ArrayList<NewsItem> listData) {
         this.listData = listData;
         layoutInflater = LayoutInflater.from(aContext);
@@ -70,7 +72,7 @@ public class DetailsCustomListAdapter extends BaseAdapter {
             holder.reportedChatroomBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, DetailsActivity.class);
+                    Intent intent = new Intent(context, ChatActivity.class);
                     intent.putExtra("message", holder.messageView.getText());
                     intent.putExtra("time", holder.date.getText());
                     intent.putExtra("name", holder.reporterNameView.getText());
