@@ -1,9 +1,13 @@
 package com.coldcoldnuts.solo;
 
 import android.content.Context;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -11,7 +15,7 @@ import java.util.ArrayList;
 /**
  * Created by Huiwen on 16/1/16.
  */
-public class ChatCustomListAdapter extends DetailsCustomListAdapter {
+public class ChatCustomListAdapter extends BaseAdapter {
     private ArrayList<NewsItem> listData;
     private LayoutInflater layoutInflater;
     private Context context;
@@ -22,6 +26,21 @@ public class ChatCustomListAdapter extends DetailsCustomListAdapter {
         context = aContext;
     }
 
+    @Override
+    public int getCount() {
+        return listData.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return listData.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
     public View getView(int position, View convertView, ViewGroup parent) {
         final ChatViewHolder holder;
         if (convertView == null) {
@@ -29,16 +48,30 @@ public class ChatCustomListAdapter extends DetailsCustomListAdapter {
 
             holder = new ChatViewHolder();
             holder.messageView = (TextView) convertView.findViewById(R.id.message_text);
-            holder.nameView = (TextView) convertView.findViewById(R.id.details_reporter);
+            holder.nameView = (TextView) convertView.findViewById(R.id.chat_name);
 
-            convertView.setTag(holder);
         } else {
             holder = (ChatViewHolder) convertView.getTag();
         }
 
         holder.messageView.setText(listData.get(position).getHeadline());
-        holder.nameView.setText("By, " + listData.get(position).getReporterName());
+        holder.nameView.setText(listData.get(position).getReporterName());
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.FILL_PARENT);
+        if (isMine(holder.nameView.getText().toString().trim())) {
+            params.gravity = Gravity.RIGHT;
+        } else {
+            params.gravity = Gravity.LEFT;
+        }
+        holder.messageView.setLayoutParams(params);
+
+        convertView.setTag(holder);
         return convertView;
+    }
+
+    private boolean isMine(String username) {
+        Log.d("HIHIHIHIHIHI", Utils.getUsername() + " " + username);
+        return Utils.getUsername().equals(username);
     }
 
     static class ChatViewHolder {

@@ -26,5 +26,10 @@
         android:text="Hello, it's me."
         android:textColor="#000000"
         android:textSize="20sp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/chat_name"
+        android:visibility="gone"/>
 
 </LinearLayout>

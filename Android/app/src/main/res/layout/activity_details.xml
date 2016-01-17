@@ -8,7 +8,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="#000000"
-    tools:context="com.coldcoldnuts.solo.DetailsActivity">
+    tools:context="com.coldcoldnuts.solo.DetailsActivity"
+    android:focusableInTouchMode="true">
 
     <include layout="@layout/list_row_layout"
         android:id="@+id/topic"></include>
@@ -17,7 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/topic"
-        android:id="@+id/details_custom_list"></ListView>
+        android:id="@+id/details_custom_list"
+        android:layout_above="@+id/post_reply"></ListView>
 
     <EditText
         android:layout_width="match_parent"

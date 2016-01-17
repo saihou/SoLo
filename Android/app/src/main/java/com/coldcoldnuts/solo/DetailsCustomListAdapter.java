@@ -20,8 +20,6 @@ public class DetailsCustomListAdapter extends BaseAdapter {
     private LayoutInflater layoutInflater;
     private Context context;
 
-    public DetailsCustomListAdapter(){super();};
-
     public DetailsCustomListAdapter(Context aContext, ArrayList<NewsItem> listData) {
         this.listData = listData;
         layoutInflater = LayoutInflater.from(aContext);
@@ -65,7 +63,7 @@ public class DetailsCustomListAdapter extends BaseAdapter {
                 //profile.setImageResource(resourceIdMale);
                 detail_profile.setImageResource(resourceIdMale);
             } else {
-                profile.setImageResource(resourceIdFemale);
+                //profile.setImageResource(resourceIdFemale);
                 detail_profile.setImageResource(resourceIdFemale);
             }
 
@@ -74,8 +72,8 @@ public class DetailsCustomListAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     Intent intent = new Intent(context, ChatActivity.class);
                     intent.putExtra("message", holder.messageView.getText());
-                    intent.putExtra("time", holder.date.getText());
-                    intent.putExtra("name", holder.reporterNameView.getText());
+                    intent.putExtra("reporter_name", holder.reporterNameView.getText());
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                 }
             });
