@@ -87,7 +87,7 @@ public class DetailsActivity extends AppCompatActivity {
         JSONObject newData = new JSONObject();
         try {
             newData.put("username", mUsername);
-            newData.put("room", Constants.MAIN_ROOM);
+            newData.put("room", mRoomName);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -111,7 +111,7 @@ public class DetailsActivity extends AppCompatActivity {
 
 
     // The various Listener functions
-    
+
     // Handler of connection error, i.e. server not available
     private Emitter.Listener onConnectError = new Emitter.Listener() {
         @Override
@@ -146,7 +146,12 @@ public class DetailsActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         return;
                     }
-                    ;
+
+                    if (!room.equals(mRoomName)) {
+                        Log.e("DetailsActivity", "Wrong Room!!");
+                        return;
+                    }
+
                     JSONObject newMsg = new JSONObject();
                     try {
                         newMsg.put("username", username);
