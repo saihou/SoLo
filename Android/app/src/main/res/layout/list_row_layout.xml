@@ -6,8 +6,8 @@
     android:background="#FFFFFF"
     android:dividerHeight="10dp"
     android:orientation="horizontal"
-    android:layout_margin="5dp">
-
+    android:dividerHeight="10.0sp"
+    android:background="@drawable/background_shadow">
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"

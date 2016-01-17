@@ -31,14 +31,13 @@
             <ListView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+
+                android:layout_margin="5dp"
                     android:id="@+id/custom_list"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:dividerHeight="8dp"
-                    android:background="#FFFFFF"
-                />
+                android:divider="@android:color/transparent"
+                android:dividerHeight="10.0sp"
+                android:padding="10dip"
+                android:clipToPadding="false"/>
 
         </android.support.v4.widget.SwipeRefreshLayout>
 
