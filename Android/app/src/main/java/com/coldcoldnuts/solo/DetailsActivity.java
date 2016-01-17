@@ -1,8 +1,14 @@
 package com.coldcoldnuts.solo;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -18,6 +24,9 @@ import io.socket.emitter.Emitter;
 
 public class DetailsActivity extends AppCompatActivity {
 
+    private DetailsCustomListAdapter mAdapter;
+
+    
     private String mInitiator; // name of the user who posted the question
     private String mTime; // the timestamp at which the question was created
     private String mQuestion; // the actual question asked
@@ -35,17 +44,21 @@ public class DetailsActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
+        // Get all the variables from Intent and set the variables above
         mInitiator = getIntent().getStringExtra("name");
         mQuestion = getIntent().getStringExtra("message");
         mTime = getIntent().getStringExtra("time");
 
         mMessages = new ArrayList<NewsItem>();
+
+        ListView lv = (ListView) findViewById(R.id.details_custom_list);
+        mAdapter = new DetailsCustomListAdapter(getApplicationContext(), mMessages);
+        lv.setAdapter(mAdapter);
 
         // Gives the room a name
         mRoomName = mInitiator + mTime;
@@ -57,12 +70,40 @@ public class DetailsActivity extends AppCompatActivity {
         mSocket.on("left room", onLeftRoom);
         mSocket.connect();
 
-        // Append the Question to mMessages
+        // Topic Question, always on top. Populate it first
         NewsItem question = new NewsItem();
         question.setHeadline(mQuestion);
         question.setReporterName(mInitiator);
-        mMessages.add(0, question);
+        View topic = (View) findViewById(R.id.topic);
+        TextView topicQuestion = (TextView) topic.findViewById(R.id.title);
+        topicQuestion.setText(mQuestion);
+        TextView asker = (TextView) topic.findViewById(R.id.reporter);
+        asker.setText(mInitiator);
 
+        final TextView post_reply = (TextView) findViewById(R.id.post_reply);
+        ImageButton sendReply = (ImageButton) findViewById(R.id.send_reply);
+        sendReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String reply = post_reply.getText().toString();
+                if (reply.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Enter a longer reply! Do not spam short replies", Toast.LENGTH_LONG);
+                } else {
+                    JSONObject confirmPost = new JSONObject();
+                    try {
+                        confirmPost.put("username", mUsername);
+                        confirmPost.put("room", mRoomName);
+                        confirmPost.put("message", reply);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    mSocket.emit("room message", confirmPost);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(post_reply.getWindowToken(), 0);
+                    post_reply.setText("");
+                }
+            }
+        });
         // join the Initiator's Question room in the socket
         JSONObject newData = new JSONObject();
         try {
@@ -102,8 +143,6 @@ public class DetailsActivity extends AppCompatActivity {
         mSocket.off("left room", onLeftRoom);
     }
 
-
-
     private void populate(JSONArray msgHistory) {
         int arrSize = msgHistory.length();
         for (int i = 0; i < arrSize; i++) {
@@ -122,7 +161,7 @@ public class DetailsActivity extends AppCompatActivity {
             }
         }
         // TODO: implement Adapter
-        //mAdapter.notifyDataSetChanged();
+        mAdapter.notifyDataSetChanged();
     }
 
     private void addMsg(JSONObject newMsg) {
@@ -136,7 +175,7 @@ public class DetailsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         // TODO: implement Adapter
-        //mAdapter.notifyDataSetChanged();
+        mAdapter.notifyDataSetChanged();
     }
 
     // The various Listener functions

@@ -7,6 +7,40 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#000000"
     tools:context="com.coldcoldnuts.solo.DetailsActivity">
+
+    <include layout="@layout/list_row_layout"
+        android:id="@+id/topic"></include>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/topic"
+        android:id="@+id/details_custom_list"></ListView>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:hint="@string/reply_to_this_topic"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/send_reply"
+        android:layout_toStartOf="@+id/send_reply"
+        android:id="@+id/post_reply"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/details_custom_list"
+        android:layout_alignEnd="@+id/details_custom_list"
+        android:layout_alignTop="@+id/post_reply"
+        android:layout_alignBottom="@+id/post_reply"
+        android:id="@+id/send_reply"
+        android:src="@drawable/ic_send_white_24dp"
+        android:background="#000000" />
 
 </RelativeLayout>

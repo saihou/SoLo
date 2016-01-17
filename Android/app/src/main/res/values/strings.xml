@@ -24,4 +24,5 @@
     <string name="radius_label">Subscribe to notifications within %s miles</string>
     <!-- when connection to socket is not successful -->
 	<string name="error_connect">Failed to connect</string>
+    <string name="reply_to_this_topic">Reply to this topic...</string>
 </resources>
