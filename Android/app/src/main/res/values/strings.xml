@@ -25,4 +25,5 @@
     <!-- when connection to socket is not successful -->
 	<string name="error_connect">Failed to connect</string>
     <string name="reply_to_this_topic">Reply to this topic...</string>
+    <string name="just_distance">0.1 mi</string>
 </resources>
