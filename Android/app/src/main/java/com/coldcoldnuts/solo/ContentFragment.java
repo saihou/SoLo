@@ -247,7 +247,13 @@ public class ContentFragment extends Fragment {
                         currTime = data.getString("time");
                     } catch (JSONException e) {
                         return;
-                    };
+                    }
+
+                    if (!room.equals(Constants.MAIN_ROOM)) {
+                        Log.e("DetailsActivity", "Wrong Room!!");
+                        return;
+                    }
+
                     JSONObject newMsg = new JSONObject();
                     try {
                         newMsg.put("username", username);
