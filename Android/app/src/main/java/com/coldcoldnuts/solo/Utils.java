@@ -1,9 +1,14 @@
 package com.coldcoldnuts.solo;
 
 import android.net.Uri;
+import android.os.Bundle;
 
 import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.Profile;
+
+import org.json.JSONObject;
 
 /**
  * Created by saihou on 1/16/16.
@@ -13,7 +18,7 @@ import com.facebook.Profile;
 public class Utils {
 
     public static String username = "no username yet";
-    public static String picture = "no picture yet";
+    public static Uri picture = null;
 
     public static boolean isFacebookLoggedIn() {
         AccessToken token = AccessToken.getCurrentAccessToken();
@@ -24,7 +29,7 @@ public class Utils {
         return username;
     }
 
-    public static String getPicture() {
+    public static Uri getPicture() {
         return picture;
     }
 
@@ -33,8 +38,30 @@ public class Utils {
         return true;
     }
     public static boolean setFacebookDetails() {
-        username = Profile.getCurrentProfile().getFirstName();
-        Uri pictureUri = Profile.getCurrentProfile().getProfilePictureUri(200,200);
+        Profile.fetchProfileForCurrentAccessToken();
+        // try to get from Profile
+        if (Profile.getCurrentProfile() != null) {
+            username = Profile.getCurrentProfile().getFirstName();
+            picture = Profile.getCurrentProfile().getProfilePictureUri(200, 200);
+        } else {
+            //if Profile has not yet been updated, then
+            //manually send a request to Graph API to get the name
+            GraphRequest request = GraphRequest.newMeRequest(
+                    AccessToken.getCurrentAccessToken(),
+                    new GraphRequest.GraphJSONObjectCallback() {
+                        @Override
+                        public void onCompleted(
+                                JSONObject object,
+                                GraphResponse response) {
+                            username = object.optString("first_name");
+                            //picture = (Uri) object.opt("picture");
+                        }
+                    });
+            Bundle parameters = new Bundle();
+            parameters.putString("fields", "id,name,link");
+            request.setParameters(parameters);
+            request.executeAsync();
+        }
         return true;
     }
 }
