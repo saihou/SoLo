@@ -1,12 +1,14 @@
 package com.coldcoldnuts.solo;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,13 +67,6 @@ public class DetailsActivity extends AppCompatActivity {
         // Gives the room a name
         mRoomName = mInitiator + mTime;
 
-        mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
-        mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
-        mSocket.on("send room message", onNewMessage);
-        mSocket.on("joined room", onJoinRoom);
-        mSocket.on("left room", onLeftRoom);
-        mSocket.connect();
-
         // Topic Question, always on top. Populate it first
         NewsItem question = new NewsItem();
         question.setHeadline(mQuestion);
@@ -81,6 +76,20 @@ public class DetailsActivity extends AppCompatActivity {
         topicQuestion.setText(mQuestion);
         TextView asker = (TextView) topic.findViewById(R.id.reporter);
         asker.setText(mInitiator);
+
+        ImageView profile = (ImageView) topic.findViewById(R.id.profile_picture);
+        Resources res = getResources();
+
+        int resourceIdMale = res.getIdentifier(
+                "avatar_male", "drawable", getPackageName());
+        int resourceIdFemale = res.getIdentifier(
+                "avatar_female", "drawable", getPackageName() );
+        if (mInitiator.equals("By, Jack Ong")) {
+            //profile.setImageResource(resourceIdMale);
+            profile.setImageResource(resourceIdMale);
+        } else {
+            profile.setImageResource(resourceIdFemale);
+        }
 
         final TextView post_reply = (TextView) findViewById(R.id.post_reply);
         ImageButton sendReply = (ImageButton) findViewById(R.id.send_reply);
@@ -106,6 +115,18 @@ public class DetailsActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
+        mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
+        mSocket.on("send room message", onNewMessage);
+        mSocket.on("joined room", onJoinRoom);
+        mSocket.on("left room", onLeftRoom);
+        mSocket.connect();
         // join the Initiator's Question room in the socket
         JSONObject newData = new JSONObject();
         try {
@@ -118,9 +139,8 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-
+    protected void onPause() {
+        super.onPause();
         // clean up mMessages
         mMessages = new ArrayList<NewsItem>();
 
@@ -133,9 +153,8 @@ public class DetailsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         mSocket.emit("leave", newData);
-        Log.v("test onDestroy", newData.toString());
+        Log.v("test onPause detail", newData.toString());
 
-        // disconnect and drop all subscription
         mSocket.emit("disconnect request");
         mSocket.disconnect();
         mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
@@ -143,6 +162,13 @@ public class DetailsActivity extends AppCompatActivity {
         mSocket.off("send room message", onNewMessage);
         mSocket.off("joined room", onJoinRoom);
         mSocket.off("left room", onLeftRoom);
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // disconnect and drop all subscription
     }
 
     private void populate(JSONArray msgHistory) {

@@ -94,6 +94,13 @@ public class ContentFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
         mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
         mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
         mSocket.on("send room message", onNewMessage);
@@ -110,7 +117,6 @@ public class ContentFragment extends Fragment {
             e.printStackTrace();
         }
         mSocket.emit("join", newData);
-
     }
 
     @Override
@@ -166,9 +172,8 @@ public class ContentFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-
+    public void onPause() {
+        super.onPause();
         mMessages = new ArrayList<NewsItem>();
         JSONObject newData = new JSONObject();
         try {
@@ -178,7 +183,7 @@ public class ContentFragment extends Fragment {
             e.printStackTrace();
         }
         mSocket.emit("leave", newData);
-        Log.v("test onDestroy", newData.toString());
+        Log.v("test onPause main", newData.toString());
         mSocket.emit("disconnect request");
         mSocket.disconnect();
         mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
@@ -186,6 +191,12 @@ public class ContentFragment extends Fragment {
         mSocket.off("send room message", onNewMessage);
         mSocket.off("joined room", onJoinRoom);
         mSocket.off("left room", onLeftRoom);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
