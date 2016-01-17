@@ -40,9 +40,13 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        getSupportActionBar().hide();
+
+
         mMessages = new ArrayList<NewsItem>();
 
         // TODO: get all the variables from Intent and set the variables above
+
 
         // Gives the room a name
         // To ensure the room name between 2 users is always the same
