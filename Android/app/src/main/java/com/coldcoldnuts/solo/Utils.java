@@ -53,12 +53,12 @@ public class Utils {
                         public void onCompleted(
                                 JSONObject object,
                                 GraphResponse response) {
-                            username = object.optString("first_name");
-                            //picture = (Uri) object.opt("picture");
+                            username = object.optString("name");
+                            picture = (Uri) object.opt("picture");
                         }
                     });
             Bundle parameters = new Bundle();
-            parameters.putString("fields", "id,name,link");
+            parameters.putString("fields", "id,name,link,picture");
             request.setParameters(parameters);
             request.executeAsync();
         }

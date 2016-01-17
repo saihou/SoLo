@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
@@ -43,6 +44,9 @@ public class MainActivity extends AppCompatActivity
         //update username in drawer
         TextView user = (TextView) navigationView.getHeaderView(0).findViewById(R.id.drawer_name);
         user.setText(Utils.getUsername());
+
+        ImageView pic = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.drawer_picture);
+        pic.setImageURI(Utils.getPicture());
     }
 
     @Override
