@@ -128,6 +128,9 @@ public class ContentFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String newPostText = newPost.getText().toString();
+                if (newPostText.equals("")) {
+                    return;
+                }
                 JSONObject confirmPost = new JSONObject();
                 try {
                     confirmPost.put("username", mUsername);
@@ -194,6 +197,7 @@ public class ContentFragment extends Fragment {
         mListener = null;
     }
 
+    // helper function to populate view with history
     private void populate(JSONArray msgHistory) {
         int arrSize = msgHistory.length();
         for (int i = 0; i < arrSize; i++) {
@@ -201,9 +205,11 @@ public class ContentFragment extends Fragment {
                 JSONObject post = msgHistory.getJSONObject(i);
                 String message = post.getString("message");
                 String user = post.getString("username");
+                String currTime = post.getString("time");
                 NewsItem newsData = new NewsItem();
                 newsData.setHeadline(message);
                 newsData.setReporterName(user);
+                newsData.setDate(currTime);
                 mMessages.add(0, newsData);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -212,11 +218,13 @@ public class ContentFragment extends Fragment {
         mAdapter.notifyDataSetChanged();
     }
 
+    // helper function to populate view with new message
     private void addMsg(JSONObject newMsg) {
         NewsItem newsData = new NewsItem();
         try {
             newsData.setHeadline(newMsg.getString("message"));
             newsData.setReporterName(newMsg.getString("username"));
+            newsData.setDate(newMsg.getString("time"));
             mMessages.add(0, newsData);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -311,7 +319,10 @@ public class ContentFragment extends Fragment {
                         return;
                     }
                     Log.v("test onJoinRoom", msgHistory.toString());
-                    populate(msgHistory);
+
+                    if (username.equals(mUsername)) {
+                        populate(msgHistory);
+                    }
                 }
             });
         }
