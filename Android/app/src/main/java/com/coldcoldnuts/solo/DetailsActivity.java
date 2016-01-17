@@ -18,13 +18,11 @@ import io.socket.emitter.Emitter;
 
 public class DetailsActivity extends AppCompatActivity {
 
-    // TODO: edit these variables and get the value from Intent
-    private String mInitiator = "from_main"; // name of the user who posted the question
-    private String mTime = "the timestamp"; // the timestamp at which the question was created
-    private String mQuestion = "the question asked from main_room"; // the actual question asked
+    private String mInitiator; // name of the user who posted the question
+    private String mTime; // the timestamp at which the question was created
+    private String mQuestion; // the actual question asked
     private String mRoomName; // the room for this question
 
-    // TODO: change mUsername to facebook user name
     private String mUsername = Utils.getUsername();
     private ArrayList<NewsItem> mMessages;
 
@@ -48,8 +46,6 @@ public class DetailsActivity extends AppCompatActivity {
         mTime = getIntent().getStringExtra("time");
 
         mMessages = new ArrayList<NewsItem>();
-
-        // TODO: get all the variables from Intent and set the variables above
 
         // Gives the room a name
         mRoomName = mInitiator + mTime;
@@ -120,7 +116,7 @@ public class DetailsActivity extends AppCompatActivity {
                 newsData.setHeadline(message);
                 newsData.setReporterName(user);
                 newsData.setDate(currTime);
-                mMessages.add(0, newsData);
+                mMessages.add(newsData);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -135,7 +131,7 @@ public class DetailsActivity extends AppCompatActivity {
             newsData.setHeadline(newMsg.getString("message"));
             newsData.setReporterName(newMsg.getString("username"));
             newsData.setDate(newMsg.getString("time"));
-            mMessages.add(0, newsData);
+            mMessages.add(newsData);
         } catch (JSONException e) {
             e.printStackTrace();
         }
