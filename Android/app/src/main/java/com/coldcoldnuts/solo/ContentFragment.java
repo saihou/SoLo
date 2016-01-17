@@ -40,9 +40,11 @@ public class ContentFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private CustomListAdapter mAdapter;
 
     // TODO: change mUsername to facebook user name
     private JSONArray mMessages = new JSONArray();
+    private ArrayList<NewsItem> image_details;
     private String mUsername = "Dummy Name";
     private Socket mSocket;
     {
@@ -80,6 +82,9 @@ public class ContentFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        image_details = new ArrayList<NewsItem>();
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -91,12 +96,6 @@ public class ContentFragment extends Fragment {
         mSocket.on("left room", onLeftRoom);
         mSocket.connect();
 
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
         // join the room "main_room" in the socket
         JSONObject newData = new JSONObject();
         try {
@@ -107,12 +106,19 @@ public class ContentFragment extends Fragment {
         }
         mSocket.emit("join", newData);
 
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_content, container, false);
 
-        ArrayList<NewsItem> image_details = getListData();
         final ListView lv1 = (ListView) view.findViewById(R.id.custom_list);
-        lv1.setAdapter(new CustomListAdapter(getContext(), image_details));
+        mAdapter = new CustomListAdapter(getContext(), image_details);
+        lv1.setAdapter(mAdapter);
+        Log.v("test populate", "i'm here");
 
         return view;
     }
@@ -165,39 +171,34 @@ public class ContentFragment extends Fragment {
         mListener = null;
     }
 
-    private ArrayList<NewsItem> getListData() {
-        ArrayList<NewsItem> results = new ArrayList<NewsItem>();
+    private void populate() {
+        int arrSize = mMessages.length();
+        for (int i = 0; i < arrSize; i++) {
+            try {
+                JSONObject post = mMessages.getJSONObject(i);
+                String message = post.getString("message");
+                String user = post.getString("username");
+                NewsItem newsData = new NewsItem();
+                newsData.setHeadline(message);
+                newsData.setReporterName(user);
+                image_details.add(0, newsData);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void addMsg(JSONObject newMsg) {
         NewsItem newsData = new NewsItem();
-        newsData.setHeadline("Dance of Democracy");
-        newsData.setReporterName("Pankaj Gupta");
-        results.add(newsData);
-
-        newsData = new NewsItem();
-        newsData.setHeadline("Major Naxal attacks in the past");
-        newsData.setReporterName("Pankaj Gupta");
-        results.add(newsData);
-
-        newsData = new NewsItem();
-        newsData.setHeadline("BCCI suspends Gurunath pending inquiry ");
-        newsData.setReporterName("Rajiv Chandan");
-        results.add(newsData);
-
-        newsData = new NewsItem();
-        newsData.setHeadline("Life convict can`t claim freedom after 14 yrs: SC");
-        newsData.setReporterName("Pankaj Gupta");
-        results.add(newsData);
-
-        newsData = new NewsItem();
-        newsData.setHeadline("Indian Army refuses to share info on soldiers mutilated at LoC");
-        newsData.setReporterName("Pankaj Gupta");
-        results.add(newsData);
-
-        newsData = new NewsItem();
-        newsData.setHeadline("French soldier stabbed; link to Woolwich attack being probed");
-        newsData.setReporterName("Sudeep Nanda");
-        results.add(newsData);
-
-        return results;
+        try {
+            newsData.setHeadline(newMsg.getString("message"));
+            newsData.setReporterName(newMsg.getString("username"));
+            image_details.add(0, newsData);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mAdapter.notifyDataSetChanged();
     }
 
 
@@ -264,6 +265,7 @@ public class ContentFragment extends Fragment {
                         e.printStackTrace();
                     }
                     Log.v("test onNewMessage", mMessages.toString());
+                    addMsg(newMsg);
                 }
             });
         }
@@ -286,6 +288,7 @@ public class ContentFragment extends Fragment {
                         return;
                     }
                     Log.v("test onJoinRoom", mMessages.toString());
+                    populate();
                 }
             });
         }
