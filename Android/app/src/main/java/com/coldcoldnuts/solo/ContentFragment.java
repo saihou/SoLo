@@ -3,7 +3,9 @@ package com.coldcoldnuts.solo;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -118,7 +120,21 @@ public class ContentFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_content, container, false);
 
-        final ListView lv1 = (ListView) view.findViewById(R.id.custom_list);
+        final SwipeRefreshLayout refreshView = (SwipeRefreshLayout) view.findViewById(R.id.refresh);
+        refreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.notifyDataSetChanged();
+                        refreshView.setRefreshing(false);
+                    }
+                }, 1000);
+                }
+        });
+
+        final ListView lv1 = (ListView) refreshView.findViewById(R.id.custom_list);
         mAdapter = new CustomListAdapter(getContext(), mMessages);
         lv1.setAdapter(mAdapter);
 
