@@ -1,6 +1,9 @@
 package com.coldcoldnuts.solo;
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +17,12 @@ import java.util.ArrayList;
 public class CustomListAdapter extends BaseAdapter {
     private ArrayList<NewsItem> listData;
     private LayoutInflater layoutInflater;
+    private Context context;
 
     public CustomListAdapter(Context aContext, ArrayList<NewsItem> listData) {
         this.listData = listData;
         layoutInflater = LayoutInflater.from(aContext);
+        context = aContext;
     }
 
     @Override
@@ -42,7 +47,18 @@ public class CustomListAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.headlineView = (TextView) convertView.findViewById(R.id.title);
             holder.reporterNameView = (TextView) convertView.findViewById(R.id.reporter);
-            holder.reportedDateView = (TextView) convertView.findViewById(R.id.date);
+            holder.reportedChatroomBtn = (TextView) convertView.findViewById(R.id.chatroom_btn);
+
+            holder.reportedChatroomBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, DetailsActivity.class);
+//                    intent.putExtra("message", holder.headlineView.getText());
+//                    intent.putExtra("time", );
+//                    intent.putExtra("name", holder.reporterNameView.getText());
+                    context.startActivity(intent);
+                }
+            });
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -50,13 +66,13 @@ public class CustomListAdapter extends BaseAdapter {
 
         holder.headlineView.setText(listData.get(position).getHeadline());
         holder.reporterNameView.setText("By, " + listData.get(position).getReporterName());
-        holder.reportedDateView.setText(listData.get(position).getDate());
+        holder.reportedChatroomBtn.setText(listData.get(position).getDate());
         return convertView;
     }
 
     static class ViewHolder {
         TextView headlineView;
         TextView reporterNameView;
-        TextView reportedDateView;
+        TextView reportedChatroomBtn;
     }
 }
