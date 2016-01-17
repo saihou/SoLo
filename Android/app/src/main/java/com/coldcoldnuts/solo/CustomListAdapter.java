@@ -49,22 +49,10 @@ public class CustomListAdapter extends BaseAdapter {
             holder.reporterNameView = (TextView) convertView.findViewById(R.id.reporter);
             holder.reportedChatroomBtn = (TextView) convertView.findViewById(R.id.chatroom_btn);
             holder.date = (TextView) convertView.findViewById(R.id.date);
+            holder.profilePicView = (ImageView) convertView.findViewById(R.id.profile_picture);
 
             ImageView background = (ImageView) convertView.findViewById(R.id.imageView);
             setRandomBackground(background);
-
-            ImageView profile = (ImageView) convertView.findViewById(R.id.profile_picture);
-            Resources res = context.getResources();
-
-            int resourceIdMale = res.getIdentifier(
-                    "avatar_male", "drawable", context.getPackageName());
-            int resourceIdFemale = res.getIdentifier(
-                    "avatar_female", "drawable", context.getPackageName() );
-            if (listData.get(position).getReporterName().equals("Jack Ong")) {
-                profile.setImageResource(resourceIdMale);
-            } else {
-                profile.setImageResource(resourceIdFemale);
-            }
 
             holder.reportedChatroomBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -81,6 +69,16 @@ public class CustomListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
+        Resources res = context.getResources();
+        int resourceIdMale = res.getIdentifier(
+                "avatar_male", "drawable", context.getPackageName());
+        int resourceIdFemale = res.getIdentifier(
+                "avatar_female", "drawable", context.getPackageName() );
+        if (listData.get(position).getReporterName().equals("Jack Ong")) {
+            holder.profilePicView.setImageResource(resourceIdMale);
+        } else {
+            holder.profilePicView.setImageResource(resourceIdFemale);
+        }
         holder.headlineView.setText(listData.get(position).getHeadline());
         holder.reporterNameView.setText("By, " + listData.get(position).getReporterName());
         holder.date.setText(listData.get(position).getDate());
@@ -116,5 +114,6 @@ public class CustomListAdapter extends BaseAdapter {
         TextView reporterNameView;
         TextView reportedChatroomBtn;
         TextView date;
+        ImageView profilePicView;
     }
 }

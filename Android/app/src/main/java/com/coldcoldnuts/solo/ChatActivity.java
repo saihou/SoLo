@@ -1,12 +1,10 @@
 package com.coldcoldnuts.solo;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -93,8 +91,6 @@ public class ChatActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     mSocket.emit("room message", confirmPost);
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(post_reply.getWindowToken(), 0);
                     post_reply.setText("");
                 }
             }

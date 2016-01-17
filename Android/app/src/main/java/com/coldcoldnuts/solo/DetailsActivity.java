@@ -1,6 +1,7 @@
 package com.coldcoldnuts.solo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -73,8 +74,23 @@ public class DetailsActivity extends AppCompatActivity {
         question.setReporterName(mInitiator);
         View topic = (View) findViewById(R.id.topic);
         TextView topicQuestion = (TextView) topic.findViewById(R.id.title);
+        TextView topicChatBtn = (TextView) topic.findViewById(R.id.chatroom_btn);
         topicQuestion.setText(mQuestion);
         TextView asker = (TextView) topic.findViewById(R.id.reporter);
+        if (mUsername.contains(mInitiator)) {
+            topicChatBtn.setVisibility(View.INVISIBLE);
+        } else {
+            topicChatBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                    intent.putExtra("message", mQuestion);
+                    intent.putExtra("reporter_name", mInitiator);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    getApplicationContext().startActivity(intent);
+                }
+            });
+        }
         asker.setText(mInitiator);
 
         ImageView profile = (ImageView) topic.findViewById(R.id.profile_picture);
