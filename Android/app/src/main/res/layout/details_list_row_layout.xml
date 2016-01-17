@@ -3,25 +3,28 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="5dip"
-    android:dividerHeight="10.0sp">
+    android:layout_margin="5dp"
+    android:dividerHeight="10.0sp"
+    android:background="#FFFFFF">
 
 <ImageView
     android:layout_width="wrap_content"
     android:layout_height="100dp"
-    android:alpha="0.3"
+    android:alpha="0.8"
     android:background="@drawable/textview_bg"
     android:scaleType="fitXY"
     android:adjustViewBounds="true"
     android:id="@+id/details_imageView"
-    android:layout_marginLeft="100dp" />
+    android:layout_marginLeft="100dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"/>
 
 <TextView
     android:id="@+id/details_title"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textColor="#FFFFFF"
-    android:padding="5dp"
+    android:padding="10dp"
     android:textStyle="bold"
     android:typeface="sans"
     android:layout_marginLeft="110dp" />
@@ -44,6 +47,7 @@
     android:drawableRight="@drawable/ic_email_outline"
     android:layout_marginRight="22dp"
     android:layout_marginEnd="22dp"
+    android:layout_marginBottom="5dp"
     android:layout_below="@+id/details_reporter"
     android:layout_alignRight="@+id/details_imageView"
     android:layout_alignEnd="@+id/details_imageView" />

@@ -10,18 +10,23 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#FFFFFF"
         android:focusableInTouchMode="true">
 
         <include layout="@layout/list_new_post"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:id="@+id/include" />
+            android:id="@+id/include"
+            android:background="#FFFFFF" />
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/refresh"
-            android:layout_below="@+id/include">
+            android:layout_below="@+id/include"
+            android:layout_marginTop="10dp"
+            android:background="#FFFFFF"
+            >
 
             <ListView
                 android:layout_width="match_parent"

@@ -2,72 +2,75 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="20dp"
+    android:dividerHeight="10dp"
     android:orientation="horizontal"
-    android:dividerHeight="10.0sp"
     android:background="@drawable/background_shadow">
-
-<ImageView
-    android:layout_width="wrap_content"
-    android:layout_height="100dp"
-    android:alpha="0.8"
-    android:background="@drawable/textview_bg"
-    android:scaleType="fitXY"
-    android:adjustViewBounds="true"
-    android:id="@+id/imageView" />
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:adjustViewBounds="true"
+        android:background="@drawable/textview_bg"
+        android:scaleType="fitXY" />
 
     <TextView
-    android:id="@+id/title"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textColor="#FFFFFF"
-    android:textSize="20sp"
-    android:padding="5dp"
-    android:textStyle="bold"
-    android:typeface="sans"
-        android:layout_alignTop="@+id/imageView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="80dp"/>
-
-<TextView
-    android:id="@+id/reporter"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textColor="#FFFFFF"
-    android:padding="5dp"
-    android:textSize="15sp"
-    android:layout_alignTop="@+id/chatroom_btn"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentStart="true"
-    android:layout_marginLeft="80dp"/>
-
-<TextView
-    android:id="@+id/chatroom_btn"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:drawableRight="@drawable/ic_email_outline"
-    android:layout_alignBottom="@+id/imageView"
-    android:layout_alignRight="@+id/imageView"
-    android:layout_alignEnd="@+id/imageView"
-    android:padding="5dp" />
-
-    <TextView
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/date"
-        android:layout_alignTop="@+id/imageView"
-        android:layout_centerHorizontal="true"
-        android:visibility="invisible"/>
-
-    <ImageView
-        android:layout_width="60dp"
-        android:layout_height="80dp"
-        android:id="@+id/profile_picture"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:src="@drawable/avatar_placeholder"
+        android:layout_alignTop="@+id/imageView"
+        android:layout_marginLeft="80dp"
+        android:elevation="6dp"
+        android:padding="5dp"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:typeface="sans" />
+
+    <TextView
+        android:id="@+id/reporter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/chatroom_btn"
+        android:layout_marginLeft="80dp"
+        android:elevation="6dp"
+        android:padding="5dp"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/chatroom_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/imageView"
-        android:layout_marginLeft="10dp"/>
+        android:layout_alignEnd="@+id/imageView"
+        android:layout_alignRight="@+id/imageView"
+        android:drawableRight="@drawable/ic_email_outline"
+        android:elevation="6dp"
+        android:padding="5dp" />
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/imageView"
+        android:layout_centerHorizontal="true"
+        android:text="New Text"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/profile_picture"
+        android:layout_width="60dp"
+        android:layout_height="80dp"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:elevation="6dp"
+        android:src="@drawable/avatar_placeholder" />
 </RelativeLayout>
