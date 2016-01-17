@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/chat_border"
+    android:padding="5dip"
+    android:dividerHeight="10.0sp">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:padding="5dp"
+        android:id="@+id/newpost_text"
+        android:hint="Where should I go for lunch?"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableRight="@drawable/ic_email_outline"
+        android:layout_centerVertical="true"
+        android:layout_alignRight="@+id/newpost_text"
+        android:layout_alignEnd="@+id/newpost_text" />
+</RelativeLayout>

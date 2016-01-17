@@ -205,9 +205,11 @@ public class ContentFragment extends Fragment {
                 JSONObject post = msgHistory.getJSONObject(i);
                 String message = post.getString("message");
                 String user = post.getString("username");
+                String currTime = post.getString("time");
                 NewsItem newsData = new NewsItem();
                 newsData.setHeadline(message);
                 newsData.setReporterName(user);
+                newsData.setDate(currTime);
                 mMessages.add(0, newsData);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -222,6 +224,7 @@ public class ContentFragment extends Fragment {
         try {
             newsData.setHeadline(newMsg.getString("message"));
             newsData.setReporterName(newMsg.getString("username"));
+            newsData.setDate(newMsg.getString("time"));
             mMessages.add(0, newsData);
         } catch (JSONException e) {
             e.printStackTrace();
