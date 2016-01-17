@@ -19,7 +19,9 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/topic"
         android:id="@+id/details_custom_list"
-        android:layout_above="@+id/post_reply"></ListView>
+        android:layout_above="@+id/post_reply"
+        android:transcriptMode="alwaysScroll"
+        android:layout_marginBottom="15dp"></ListView>
 
     <EditText
         android:layout_width="match_parent"
@@ -33,7 +35,10 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:padding="15dp"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:elevation="3dp"
+        android:layout_marginBottom="10dp"
+        />
 
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
@@ -44,6 +49,9 @@
         android:layout_alignParentBottom="true"
         android:layout_alignRight="@+id/details_custom_list"
         android:layout_alignEnd="@+id/details_custom_list"
-        android:layout_alignBottom="@+id/details_custom_list"/>
+        android:layout_alignBottom="@+id/details_custom_list"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="10dp"
+        android:elevation="3dp"/>
 
 </RelativeLayout>
