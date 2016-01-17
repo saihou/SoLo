@@ -60,8 +60,10 @@ public class ChatCustomListAdapter extends BaseAdapter {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.FILL_PARENT);
         if (isMine(holder.nameView.getText().toString().trim())) {
             params.gravity = Gravity.RIGHT;
+            holder.messageView.setBackgroundResource(R.drawable.speech_bubble_green);
         } else {
             params.gravity = Gravity.LEFT;
+            holder.messageView.setBackgroundResource(R.drawable.speech_bubble_orange);
         }
         holder.messageView.setLayoutParams(params);
 
