@@ -128,6 +128,9 @@ public class ContentFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String newPostText = newPost.getText().toString();
+                if (newPostText.equals("")) {
+                    return;
+                }
                 JSONObject confirmPost = new JSONObject();
                 try {
                     confirmPost.put("username", mUsername);
@@ -194,6 +197,7 @@ public class ContentFragment extends Fragment {
         mListener = null;
     }
 
+    // helper function to populate view with history
     private void populate(JSONArray msgHistory) {
         int arrSize = msgHistory.length();
         for (int i = 0; i < arrSize; i++) {
@@ -212,6 +216,7 @@ public class ContentFragment extends Fragment {
         mAdapter.notifyDataSetChanged();
     }
 
+    // helper function to populate view with new message
     private void addMsg(JSONObject newMsg) {
         NewsItem newsData = new NewsItem();
         try {
@@ -311,7 +316,10 @@ public class ContentFragment extends Fragment {
                         return;
                     }
                     Log.v("test onJoinRoom", msgHistory.toString());
-                    populate(msgHistory);
+
+                    if (username.equals(mUsername)) {
+                        populate(msgHistory);
+                    }
                 }
             });
         }

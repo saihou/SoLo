@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -22,8 +23,8 @@ public class ChatActivity extends AppCompatActivity {
     private String mRoomName; // the room for this private chat
 
     // TODO: change mUsername to facebook user name
-    private String mUsername = "Dummy User at Chat";
-    private JSONArray mMessages = new JSONArray();
+    private String mUsername = Utils.getUsername();
+    private ArrayList<NewsItem> mMessages;
 
     private Socket mSocket;
     {
@@ -38,6 +39,8 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        mMessages = new ArrayList<NewsItem>();
 
         // TODO: get all the variables from Intent and set the variables above
 
@@ -74,7 +77,7 @@ public class ChatActivity extends AppCompatActivity {
         super.onDestroy();
 
         // clean up mMessages
-        mMessages = new JSONArray();
+        mMessages = new ArrayList<NewsItem>();
 
         // Leave the room
         JSONObject newData = new JSONObject();
@@ -86,7 +89,6 @@ public class ChatActivity extends AppCompatActivity {
         }
         mSocket.emit("leave", newData);
         Log.v("test onDestroy", newData.toString());
-        Log.v("test onDestroy", mMessages.toString());
 
         // disconnect and drop all subscription
         mSocket.emit("disconnect request");
@@ -96,6 +98,38 @@ public class ChatActivity extends AppCompatActivity {
         mSocket.off("send room message", onNewMessage);
         mSocket.off("joined room", onJoinRoom);
         mSocket.off("left room", onLeftRoom);
+    }
+
+    private void populate(JSONArray msgHistory) {
+        int arrSize = msgHistory.length();
+        for (int i = 0; i < arrSize; i++) {
+            try {
+                JSONObject post = msgHistory.getJSONObject(i);
+                String message = post.getString("message");
+                String user = post.getString("username");
+                NewsItem newsData = new NewsItem();
+                newsData.setHeadline(message);
+                newsData.setReporterName(user);
+                mMessages.add(0, newsData);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        // TODO: implement Adapter
+        //mAdapter.notifyDataSetChanged();
+    }
+
+    private void addMsg(JSONObject newMsg) {
+        NewsItem newsData = new NewsItem();
+        try {
+            newsData.setHeadline(newMsg.getString("message"));
+            newsData.setReporterName(newMsg.getString("username"));
+            mMessages.add(0, newsData);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        // TODO: implement Adapter
+        //mAdapter.notifyDataSetChanged();
     }
 
 
@@ -150,17 +184,16 @@ public class ChatActivity extends AppCompatActivity {
                         newMsg.put("username", username);
                         newMsg.put("message", message);
                         newMsg.put("time", currTime);
-                        mMessages.put(newMsg);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    Log.v("test onNewMessage", mMessages.toString());
+                    Log.v("test onNewMessage", newMsg.toString());
+                    addMsg(newMsg);
                 }
             });
         }
     };
 
-    //handler of join room action
     private Emitter.Listener onJoinRoom = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
@@ -170,20 +203,23 @@ public class ChatActivity extends AppCompatActivity {
                     JSONObject data = (JSONObject) args[0];
                     String username;
                     String room;
+                    JSONArray msgHistory;
                     try {
                         username = data.getString("username");
                         room = data.getString("room");
-                        mMessages = data.getJSONArray("messages");
+                        msgHistory = data.getJSONArray("messages");
                     } catch (JSONException e) {
                         return;
                     }
-                    Log.v("test onJoinRoom", mMessages.toString());
+                    Log.v("test onJoinRoom", msgHistory.toString());
+                    if (username.equals(mUsername)) {
+                        populate(msgHistory);
+                    }
                 }
             });
         }
     };
 
-    //handler of leave room action
     private Emitter.Listener onLeftRoom = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
