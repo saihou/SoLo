@@ -3,10 +3,8 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="20dp"
-    android:background="#FFFFFF"
     android:dividerHeight="10dp"
     android:orientation="horizontal"
-    android:dividerHeight="10.0sp"
     android:background="@drawable/background_shadow">
     <ImageView
         android:id="@+id/imageView"

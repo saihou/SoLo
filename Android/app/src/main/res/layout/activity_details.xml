@@ -20,8 +20,8 @@
         android:layout_below="@+id/topic"
         android:id="@+id/details_custom_list"
         android:layout_above="@+id/post_reply"
-        android:stackFromBottom="true"
-        android:transcriptMode="alwaysScroll"></ListView>
+        android:transcriptMode="alwaysScroll"
+        android:layout_marginBottom="15dp"></ListView>
 
     <EditText
         android:layout_width="match_parent"
