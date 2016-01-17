@@ -43,8 +43,7 @@ public class ContentFragment extends Fragment {
     private CustomListAdapter mAdapter;
 
     // TODO: change mUsername to facebook user name
-    private JSONArray mMessages = new JSONArray();
-    private ArrayList<NewsItem> image_details;
+    private ArrayList<NewsItem> mMessages;
     private String mUsername = "Dummy Name";
     private Socket mSocket;
     {
@@ -83,7 +82,7 @@ public class ContentFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        image_details = new ArrayList<NewsItem>();
+        mMessages = new ArrayList<NewsItem>();
 
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -116,9 +115,8 @@ public class ContentFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_content, container, false);
 
         final ListView lv1 = (ListView) view.findViewById(R.id.custom_list);
-        mAdapter = new CustomListAdapter(getContext(), image_details);
+        mAdapter = new CustomListAdapter(getContext(), mMessages);
         lv1.setAdapter(mAdapter);
-        Log.v("test populate", "i'm here");
 
         return view;
     }
@@ -127,7 +125,7 @@ public class ContentFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
 
-        mMessages = new JSONArray();
+        mMessages = new ArrayList<NewsItem>();
         JSONObject newData = new JSONObject();
         try {
             newData.put("username", mUsername);
@@ -137,7 +135,6 @@ public class ContentFragment extends Fragment {
         }
         mSocket.emit("leave", newData);
         Log.v("test onDestroy", newData.toString());
-        Log.v("test onDestroy", mMessages.toString());
         mSocket.emit("disconnect request");
         mSocket.disconnect();
         mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
@@ -171,17 +168,17 @@ public class ContentFragment extends Fragment {
         mListener = null;
     }
 
-    private void populate() {
-        int arrSize = mMessages.length();
+    private void populate(JSONArray msgHistory) {
+        int arrSize = msgHistory.length();
         for (int i = 0; i < arrSize; i++) {
             try {
-                JSONObject post = mMessages.getJSONObject(i);
+                JSONObject post = msgHistory.getJSONObject(i);
                 String message = post.getString("message");
                 String user = post.getString("username");
                 NewsItem newsData = new NewsItem();
                 newsData.setHeadline(message);
                 newsData.setReporterName(user);
-                image_details.add(0, newsData);
+                mMessages.add(0, newsData);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -194,7 +191,7 @@ public class ContentFragment extends Fragment {
         try {
             newsData.setHeadline(newMsg.getString("message"));
             newsData.setReporterName(newMsg.getString("username"));
-            image_details.add(0, newsData);
+            mMessages.add(0, newsData);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -260,11 +257,10 @@ public class ContentFragment extends Fragment {
                         newMsg.put("username", username);
                         newMsg.put("message", message);
                         newMsg.put("time", currTime);
-                        mMessages.put(newMsg);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    Log.v("test onNewMessage", mMessages.toString());
+                    Log.v("test onNewMessage", newMsg.toString());
                     addMsg(newMsg);
                 }
             });
@@ -280,15 +276,16 @@ public class ContentFragment extends Fragment {
                     JSONObject data = (JSONObject) args[0];
                     String username;
                     String room;
+                    JSONArray msgHistory;
                     try {
                         username = data.getString("username");
                         room = data.getString("room");
-                        mMessages = data.getJSONArray("messages");
+                        msgHistory = data.getJSONArray("messages");
                     } catch (JSONException e) {
                         return;
                     }
-                    Log.v("test onJoinRoom", mMessages.toString());
-                    populate();
+                    Log.v("test onJoinRoom", msgHistory.toString());
+                    populate(msgHistory);
                 }
             });
         }
