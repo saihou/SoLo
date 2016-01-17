@@ -20,8 +20,6 @@ public class DetailsCustomListAdapter extends BaseAdapter {
     private LayoutInflater layoutInflater;
     private Context context;
 
-    public DetailsCustomListAdapter(){super();};
-
     public DetailsCustomListAdapter(Context aContext, ArrayList<NewsItem> listData) {
         this.listData = listData;
         layoutInflater = LayoutInflater.from(aContext);
@@ -53,7 +51,6 @@ public class DetailsCustomListAdapter extends BaseAdapter {
             holder.reportedChatroomBtn = (TextView) convertView.findViewById(R.id.details_chatroom_btn);
             holder.date = (TextView) convertView.findViewById(R.id.details_date);
 
-            ImageView profile = (ImageView) convertView.findViewById(R.id.profile_picture);
             ImageView detail_profile = (ImageView) convertView.findViewById(R.id.detail_profile);
             Resources res = context.getResources();
 
@@ -62,10 +59,8 @@ public class DetailsCustomListAdapter extends BaseAdapter {
             int resourceIdFemale = res.getIdentifier(
                     "avatar_female", "drawable", context.getPackageName() );
             if (listData.get(position).getReporterName().equals("Jack Ong")) {
-                //profile.setImageResource(resourceIdMale);
                 detail_profile.setImageResource(resourceIdMale);
             } else {
-                // profile.setImageResource(resourceIdFemale);
                 detail_profile.setImageResource(resourceIdFemale);
             }
 
@@ -74,8 +69,8 @@ public class DetailsCustomListAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     Intent intent = new Intent(context, ChatActivity.class);
                     intent.putExtra("message", holder.messageView.getText());
-                    intent.putExtra("time", holder.date.getText());
-                    intent.putExtra("name", holder.reporterNameView.getText());
+                    intent.putExtra("reporter_name", holder.reporterNameView.getText());
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                 }
             });
