@@ -9,7 +9,7 @@
 <ImageView
     android:layout_width="wrap_content"
     android:layout_height="100dp"
-    android:alpha="0.6"
+    android:alpha="0.3"
     android:background="@drawable/textview_bg"
     android:scaleType="fitXY"
     android:adjustViewBounds="true"
