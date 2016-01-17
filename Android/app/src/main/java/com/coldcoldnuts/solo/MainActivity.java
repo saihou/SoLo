@@ -8,6 +8,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -50,6 +51,25 @@ public class MainActivity extends AppCompatActivity
         ImageView pic = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.drawer_picture);
         pic.setImageURI(Utils.getPicture());
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.v("mainActivity", "stopped");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.v("mainActivity", "paused");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.v("mainActivity", "destroyed");
+    }
+
 
     @Override
     public void onBackPressed() {

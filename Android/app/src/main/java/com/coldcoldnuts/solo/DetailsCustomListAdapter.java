@@ -54,7 +54,6 @@ public class DetailsCustomListAdapter extends BaseAdapter {
             ImageView background = (ImageView) convertView.findViewById(R.id.details_imageView);
             CustomListAdapter.setRandomBackground(background);
 
-            ImageView profile = (ImageView) convertView.findViewById(R.id.profile_picture);
             ImageView detail_profile = (ImageView) convertView.findViewById(R.id.detail_profile);
             Resources res = context.getResources();
 
@@ -63,10 +62,8 @@ public class DetailsCustomListAdapter extends BaseAdapter {
             int resourceIdFemale = res.getIdentifier(
                     "avatar_female", "drawable", context.getPackageName() );
             if (listData.get(position).getReporterName().equals("Jack Ong")) {
-                //profile.setImageResource(resourceIdMale);
                 detail_profile.setImageResource(resourceIdMale);
             } else {
-                //profile.setImageResource(resourceIdFemale);
                 detail_profile.setImageResource(resourceIdFemale);
             }
 
@@ -75,7 +72,7 @@ public class DetailsCustomListAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     Intent intent = new Intent(context, ChatActivity.class);
                     intent.putExtra("message", holder.messageView.getText());
-                    intent.putExtra("reporter_name", holder.reporterNameView.getText());
+                    intent.putExtra("reporter_name", holder.reporterNameView.getText().toString().substring(4));
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                 }

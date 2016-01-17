@@ -72,7 +72,7 @@ public class CustomListAdapter extends BaseAdapter {
                     Intent intent = new Intent(context, DetailsActivity.class);
                     intent.putExtra("message", holder.headlineView.getText());
                     intent.putExtra("time", holder.date.getText());
-                    intent.putExtra("name", holder.reporterNameView.getText());
+                    intent.putExtra("name", holder.reporterNameView.getText().toString().substring(4));
                     context.startActivity(intent);
                 }
             });

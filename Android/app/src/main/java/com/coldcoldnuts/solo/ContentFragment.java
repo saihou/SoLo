@@ -95,6 +95,8 @@ public class ContentFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+        Log.v("mainFragment", "create");
+
     }
 
     @Override
@@ -117,6 +119,8 @@ public class ContentFragment extends Fragment {
             e.printStackTrace();
         }
         mSocket.emit("join", newData);
+
+        Log.v("mainFragment", "start");
     }
 
     @Override
@@ -191,11 +195,20 @@ public class ContentFragment extends Fragment {
         mSocket.off("send room message", onNewMessage);
         mSocket.off("joined room", onJoinRoom);
         mSocket.off("left room", onLeftRoom);
+
+        Log.v("mainFragment", "paused");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.v("mainFragment", "stop");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.v("mainFragment", "destroyed");
 
     }
 
