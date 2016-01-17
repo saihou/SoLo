@@ -52,7 +52,7 @@ public class CustomListAdapter extends BaseAdapter {
             holder.profilePicView = (ImageView) convertView.findViewById(R.id.profile_picture);
 
             ImageView background = (ImageView) convertView.findViewById(R.id.imageView);
-            setRandomBackground(background);
+            setRandomBackground(background, position);
 
             holder.reportedChatroomBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -85,8 +85,8 @@ public class CustomListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public static void setRandomBackground(ImageView bg) {
-        int rdm = (int) Math.round(Math.random() * 5.0f);
+    public static void setRandomBackground(ImageView bg, int position) {
+        int rdm = position%6;
         switch (rdm) {
             case 0:
                 bg.setBackgroundResource(R.drawable.cafe);

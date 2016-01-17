@@ -24,12 +24,11 @@
             android:layout_below="@+id/include">
 
             <ListView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                    android:id="@+id/custom_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/custom_list"
                 android:divider="@android:color/transparent"
-                android:dividerHeight="10.0sp"
+                android:dividerHeight="5.0sp"
                 android:padding="10dip"
                 android:clipToPadding="false"/>
 

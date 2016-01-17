@@ -53,7 +53,7 @@ public class DetailsCustomListAdapter extends BaseAdapter {
             holder.detailProfile = (ImageView) convertView.findViewById(R.id.detail_profile);
 
             ImageView background = (ImageView) convertView.findViewById(R.id.details_imageView);
-            CustomListAdapter.setRandomBackground(background);
+            CustomListAdapter.setRandomBackground(background, position);
 
             holder.reportedChatroomBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
