@@ -29,18 +29,19 @@
         android:layout_toStartOf="@+id/send_reply"
         android:id="@+id/post_reply"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp" />
+        android:layout_marginRight="10dp"
+        android:padding="15dp"
+        android:textSize="18sp" />
 
-    <ImageButton
+    <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/send_reply"
+        android:src="@drawable/ic_send_white_24dp"
+        android:background="#000000"
         android:layout_alignParentBottom="true"
         android:layout_alignRight="@+id/details_custom_list"
         android:layout_alignEnd="@+id/details_custom_list"
-        android:layout_alignTop="@+id/post_reply"
-        android:layout_alignBottom="@+id/post_reply"
-        android:id="@+id/send_reply"
-        android:src="@drawable/ic_send_white_24dp"
-        android:background="#000000" />
+        android:layout_alignBottom="@+id/details_custom_list"/>
 
 </RelativeLayout>

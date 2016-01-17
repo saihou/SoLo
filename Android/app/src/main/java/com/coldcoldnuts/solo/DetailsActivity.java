@@ -49,6 +49,8 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
+        getSupportActionBar().setTitle("Topic");
+
         // Get all the variables from Intent and set the variables above
         mInitiator = getIntent().getStringExtra("name");
         mQuestion = getIntent().getStringExtra("message");

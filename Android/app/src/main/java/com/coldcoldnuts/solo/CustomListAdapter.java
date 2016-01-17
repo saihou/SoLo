@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -48,6 +49,9 @@ public class CustomListAdapter extends BaseAdapter {
             holder.reportedChatroomBtn = (TextView) convertView.findViewById(R.id.chatroom_btn);
             holder.date = (TextView) convertView.findViewById(R.id.date);
 
+            ImageView background = (ImageView) convertView.findViewById(R.id.imageView);
+            //setRandomBackground(background);
+
             holder.reportedChatroomBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -67,6 +71,33 @@ public class CustomListAdapter extends BaseAdapter {
         holder.reporterNameView.setText("By, " + listData.get(position).getReporterName());
         holder.date.setText(listData.get(position).getDate());
         return convertView;
+    }
+
+    public void setRandomBackground(ImageView bg) {
+        int rdm = (int) Math.round(Math.random() * 2.0f);
+        switch (rdm) {
+            case 0:
+                bg.setBackgroundResource(R.drawable.ferry_building);
+                break;
+            case 1:
+                bg.setBackgroundResource(R.drawable.golden_gate);
+                break;
+            case 2:
+                bg.setBackgroundResource(R.drawable.palace_of_finearts);
+                break;
+            case 3:
+                bg.setBackgroundResource(R.drawable.ferry_building);
+                break;
+            case 4:
+                bg.setBackgroundResource(R.drawable.cafe);
+                break;
+            case 5:
+                bg.setBackgroundResource(R.drawable.houses);
+                break;
+            case 6:
+                bg.setBackgroundResource(R.drawable.palace_of_finearts);
+                break;
+        }
     }
 
     static class ViewHolder {
