@@ -2,6 +2,7 @@ package com.coldcoldnuts.solo;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,19 @@ public class CustomListAdapter extends BaseAdapter {
 
             ImageView background = (ImageView) convertView.findViewById(R.id.imageView);
             //setRandomBackground(background);
+
+            ImageView profile = (ImageView) convertView.findViewById(R.id.profile_picture);
+            Resources res = context.getResources();
+
+            int resourceIdMale = res.getIdentifier(
+                    "avatar_male", "drawable", context.getPackageName());
+            int resourceIdFemale = res.getIdentifier(
+                    "avatar_female", "drawable", context.getPackageName() );
+            if (listData.get(position).getReporterName().equals("Jack Ong")) {
+                profile.setImageResource(resourceIdMale);
+            } else {
+                profile.setImageResource(resourceIdFemale);
+            }
 
             holder.reportedChatroomBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
