@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -136,6 +137,9 @@ public class ContentFragment extends Fragment {
                     e.printStackTrace();
                 }
                 mSocket.emit("room message", confirmPost);
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(newPost.getWindowToken(), 0);
+                newPost.setText("");
             }
         });
 
