@@ -8,7 +8,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -40,11 +42,11 @@ public class ContentFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private CustomListAdapter mAdapter;
 
-    // TODO: change mUsername to facebook user name
+    private CustomListAdapter mAdapter;
     private ArrayList<NewsItem> mMessages;
-    private String mUsername = "Dummy Name";
+    private String mUsername =  Utils.getUsername();
+    private String mRoomName;
     private Socket mSocket;
     {
         try {
@@ -83,6 +85,7 @@ public class ContentFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mMessages = new ArrayList<NewsItem>();
+        mRoomName = Constants.MAIN_ROOM;
 
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -99,7 +102,7 @@ public class ContentFragment extends Fragment {
         JSONObject newData = new JSONObject();
         try {
             newData.put("username", mUsername);
-            newData.put("room", Constants.MAIN_ROOM);
+            newData.put("room", mRoomName);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -118,6 +121,25 @@ public class ContentFragment extends Fragment {
         mAdapter = new CustomListAdapter(getContext(), mMessages);
         lv1.setAdapter(mAdapter);
 
+        TextView sendNewPost = (TextView) view.findViewById(R.id.newpost_send);
+        final EditText newPost = (EditText) view.findViewById(R.id.newpost_text);
+        sendNewPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newPostText = newPost.getText().toString();
+                JSONObject confirmPost = new JSONObject();
+                try {
+                    confirmPost.put("username", mUsername);
+                    confirmPost.put("room", mRoomName);
+                    confirmPost.put("message", newPostText);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                mSocket.emit("room message", confirmPost);
+            }
+        });
+
+
         return view;
     }
 
@@ -129,7 +151,7 @@ public class ContentFragment extends Fragment {
         JSONObject newData = new JSONObject();
         try {
             newData.put("username", mUsername);
-            newData.put("room", Constants.MAIN_ROOM);
+            newData.put("room", mRoomName);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -247,7 +269,7 @@ public class ContentFragment extends Fragment {
                         return;
                     }
 
-                    if (!room.equals(Constants.MAIN_ROOM)) {
+                    if (!room.equals(mRoomName)) {
                         Log.e("DetailsActivity", "Wrong Room!!");
                         return;
                     }
