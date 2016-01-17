@@ -73,4 +73,14 @@
         android:layout_marginLeft="10dp"
         android:elevation="6dp"
         android:src="@drawable/avatar_placeholder" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/just_distance"
+            android:textColor="#FFFFFF"
+            android:paddingTop="2dp"
+            android:layout_alignBottom="@+id/reporter"
+            android:layout_toLeftOf="@+id/chatroom_btn"
+            android:layout_toStartOf="@+id/chatroom_btn" />
 </RelativeLayout>
