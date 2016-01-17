@@ -3,7 +3,9 @@ package com.coldcoldnuts.solo;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -92,6 +94,13 @@ public class ContentFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
         mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
         mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
         mSocket.on("send room message", onNewMessage);
@@ -108,7 +117,6 @@ public class ContentFragment extends Fragment {
             e.printStackTrace();
         }
         mSocket.emit("join", newData);
-
     }
 
     @Override
@@ -118,7 +126,21 @@ public class ContentFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_content, container, false);
 
-        final ListView lv1 = (ListView) view.findViewById(R.id.custom_list);
+        final SwipeRefreshLayout refreshView = (SwipeRefreshLayout) view.findViewById(R.id.refresh);
+        refreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.notifyDataSetChanged();
+                        refreshView.setRefreshing(false);
+                    }
+                }, 1000);
+                }
+        });
+
+        final ListView lv1 = (ListView) refreshView.findViewById(R.id.custom_list);
         mAdapter = new CustomListAdapter(getContext(), mMessages);
         lv1.setAdapter(mAdapter);
 
@@ -150,9 +172,8 @@ public class ContentFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-
+    public void onPause() {
+        super.onPause();
         mMessages = new ArrayList<NewsItem>();
         JSONObject newData = new JSONObject();
         try {
@@ -162,7 +183,7 @@ public class ContentFragment extends Fragment {
             e.printStackTrace();
         }
         mSocket.emit("leave", newData);
-        Log.v("test onDestroy", newData.toString());
+        Log.v("test onPause main", newData.toString());
         mSocket.emit("disconnect request");
         mSocket.disconnect();
         mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
@@ -170,6 +191,12 @@ public class ContentFragment extends Fragment {
         mSocket.off("send room message", onNewMessage);
         mSocket.off("joined room", onJoinRoom);
         mSocket.off("left room", onLeftRoom);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -198,36 +225,51 @@ public class ContentFragment extends Fragment {
 
     // helper function to populate view with history
     private void populate(JSONArray msgHistory) {
+        Log.v("test on populate", "step 1");
         int arrSize = msgHistory.length();
         for (int i = 0; i < arrSize; i++) {
             try {
+                Log.v("test on populate", "step 2.1");
                 JSONObject post = msgHistory.getJSONObject(i);
                 String message = post.getString("message");
                 String user = post.getString("username");
                 String currTime = post.getString("time");
+                Log.v("test on populate", "step 2.2");
                 NewsItem newsData = new NewsItem();
                 newsData.setHeadline(message);
                 newsData.setReporterName(user);
                 newsData.setDate(currTime);
                 mMessages.add(0, newsData);
+                Log.v("test on populate", "step 2.3");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+        Log.v("test on populate", "step 3");
+        for (int i = 0; i < mMessages.size(); i++) {
+            Log.v("test on populate", mMessages.get(i).getHeadline());
         }
         mAdapter.notifyDataSetChanged();
     }
 
     // helper function to populate view with new message
     private void addMsg(JSONObject newMsg) {
+        Log.v("test onAddMsg", "step 1");
         NewsItem newsData = new NewsItem();
         try {
             newsData.setHeadline(newMsg.getString("message"));
             newsData.setReporterName(newMsg.getString("username"));
             newsData.setDate(newMsg.getString("time"));
             mMessages.add(0, newsData);
+            Log.v("test onAddMsg", "step 2");
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        Log.v("test onAddMsg", "step 3");
+        for (int i = 0; i < mMessages.size(); i++) {
+            Log.v("test onAddMsg", mMessages.get(i).getHeadline());
+        }
+        Log.v("test onAddMsg", "step 4");
         mAdapter.notifyDataSetChanged();
     }
 

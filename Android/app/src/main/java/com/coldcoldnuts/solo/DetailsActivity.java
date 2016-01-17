@@ -49,6 +49,8 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
+        getSupportActionBar().setTitle("Topic");
+
         // Get all the variables from Intent and set the variables above
         mInitiator = getIntent().getStringExtra("name");
         mQuestion = getIntent().getStringExtra("message");
@@ -62,13 +64,6 @@ public class DetailsActivity extends AppCompatActivity {
 
         // Gives the room a name
         mRoomName = mInitiator + mTime;
-
-        mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
-        mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
-        mSocket.on("send room message", onNewMessage);
-        mSocket.on("joined room", onJoinRoom);
-        mSocket.on("left room", onLeftRoom);
-        mSocket.connect();
 
         // Topic Question, always on top. Populate it first
         NewsItem question = new NewsItem();
@@ -104,6 +99,18 @@ public class DetailsActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
+        mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
+        mSocket.on("send room message", onNewMessage);
+        mSocket.on("joined room", onJoinRoom);
+        mSocket.on("left room", onLeftRoom);
+        mSocket.connect();
         // join the Initiator's Question room in the socket
         JSONObject newData = new JSONObject();
         try {
@@ -116,9 +123,8 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-
+    protected void onPause() {
+        super.onPause();
         // clean up mMessages
         mMessages = new ArrayList<NewsItem>();
 
@@ -131,9 +137,8 @@ public class DetailsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         mSocket.emit("leave", newData);
-        Log.v("test onDestroy", newData.toString());
+        Log.v("test onPause detail", newData.toString());
 
-        // disconnect and drop all subscription
         mSocket.emit("disconnect request");
         mSocket.disconnect();
         mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
@@ -141,6 +146,13 @@ public class DetailsActivity extends AppCompatActivity {
         mSocket.off("send room message", onNewMessage);
         mSocket.off("joined room", onJoinRoom);
         mSocket.off("left room", onLeftRoom);
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // disconnect and drop all subscription
     }
 
     private void populate(JSONArray msgHistory) {

@@ -25,6 +25,8 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setTitle("Feed");
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -92,11 +94,13 @@ public class MainActivity extends AppCompatActivity
         else item.setChecked(true);
 
         if (id == R.id.nav_feed) {
+            getSupportActionBar().setTitle("Feed");
             ContentFragment fragment = new ContentFragment();
             android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.frame,fragment);
             fragmentTransaction.commit();
         } else if (id == R.id.nav_settings) {
+            getSupportActionBar().setTitle("Settings");
             SettingsFragment fragment = new SettingsFragment();
             android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.frame,fragment);
