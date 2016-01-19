@@ -37,7 +37,8 @@
             android:layout_above="@+id/chat_text"
             android:transcriptMode="alwaysScroll"
             android:divider="#FFFFFF"
-            android:dividerHeight="5dp"/>
+            android:dividerHeight="5dp"
+            android:padding="10dp"/>
 
         <EditText
             android:layout_width="match_parent"
@@ -52,7 +53,7 @@
             android:layout_marginRight="10dp"
             android:padding="15dp"
             android:textSize="18sp"
-            android:elevation="3dp"
+            android:elevation="4dp"
             android:layout_marginBottom="10dp" />
 
         <android.support.design.widget.FloatingActionButton
@@ -65,7 +66,7 @@
             android:layout_alignParentEnd="true"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="10dp"
-            android:elevation="3dp"/>
+            android:elevation="4dp"/>
 
     </RelativeLayout>
 

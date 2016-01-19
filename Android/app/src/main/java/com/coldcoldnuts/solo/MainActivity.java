@@ -1,6 +1,5 @@
 package com.coldcoldnuts.solo;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,8 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,
-        SettingsFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +44,8 @@ public class MainActivity extends AppCompatActivity
         //update username in drawer
         TextView user = (TextView) navigationView.getHeaderView(0).findViewById(R.id.drawer_name);
         user.setText(Utils.getUsername());
-
         ImageView pic = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.drawer_picture);
-        pic.setImageURI(Utils.getPicture());
+        pic.setImageResource(R.drawable.avatar_placeholder);
     }
 
     @Override
@@ -129,10 +126,5 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
     }
 }

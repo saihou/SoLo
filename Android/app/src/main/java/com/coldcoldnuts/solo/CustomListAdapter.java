@@ -74,7 +74,8 @@ public class CustomListAdapter extends BaseAdapter {
                 "avatar_male", "drawable", context.getPackageName());
         int resourceIdFemale = res.getIdentifier(
                 "avatar_female", "drawable", context.getPackageName() );
-        if (listData.get(position).getReporterName().equals("Jack Ong")) {
+        if (listData.get(position).getReporterName().equals("Jack Ong") ||
+                listData.get(position).getReporterName().equals("Xiao Ming")) {
             holder.profilePicView.setImageResource(resourceIdMale);
         } else {
             holder.profilePicView.setImageResource(resourceIdFemale);

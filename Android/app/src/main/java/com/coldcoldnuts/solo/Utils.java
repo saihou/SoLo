@@ -19,6 +19,7 @@ public class Utils {
 
     public static String username = "no username yet";
     public static Uri picture = null;
+    public static boolean isConnected = true; //current state of the network,  defaults to true
 
     public static boolean isFacebookLoggedIn() {
         AccessToken token = AccessToken.getCurrentAccessToken();

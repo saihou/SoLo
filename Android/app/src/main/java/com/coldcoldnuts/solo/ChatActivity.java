@@ -55,7 +55,7 @@ public class ChatActivity extends AppCompatActivity {
         TextView intro = (TextView) findViewById(R.id.intro_to_chat);
         intro.setText("Welcome to the private chat! Your last topic is \"" + topic + "\".");
         TextView title = (TextView) findViewById(R.id.chat_other_person);
-        title.setText(mOtherUser);
+        title.setText(" " + mOtherUser);
 
         mMessagesChat = new ArrayList<NewsItem>();
 
@@ -99,6 +99,13 @@ public class ChatActivity extends AppCompatActivity {
                     }
                     mSocket.emit("room message", confirmPost);
                     post_reply.setText("");
+
+                    // if network is not connected i.e. server down
+                    if (!Utils.isConnected) {
+                        mMessagesChat.add(ContentFragment.makeDummyData(reply, mUsername, "0000011111"));
+                        mMessagesChat.add(ContentFragment.makeDummyData(reply, "I'm definitely not "+mUsername, "0000011111"));
+                        mAdapter.notifyDataSetChanged();
+                    }
                 }
             }
         });
