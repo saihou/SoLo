@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        ContentFragment.OnFragmentInteractionListener,
         SettingsFragment.OnFragmentInteractionListener {
 
     @Override
