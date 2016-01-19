@@ -141,7 +141,7 @@ public class ContentFragment extends Fragment {
                         refreshView.setRefreshing(false);
                     }
                 }, 1000);
-                }
+            }
         });
 
         final ListView lv1 = (ListView) refreshView.findViewById(R.id.custom_list);
@@ -169,6 +169,12 @@ public class ContentFragment extends Fragment {
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(newPost.getWindowToken(), 0);
                 newPost.setText("");
+
+                // if network is not connected i.e. server down
+                if (!Utils.isConnected) {
+                    mMessages.add(0, makeDummyData(newPostText, mUsername, "0000011111"));
+                    mAdapter.notifyDataSetChanged();
+                }
             }
         });
 
@@ -212,11 +218,19 @@ public class ContentFragment extends Fragment {
 
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    private void showDummyData() {
+        if (!Utils.isConnected) return;
+        mMessages.add(makeDummyData("Anybody wanna hang??", "Dummy", "1234567890"));
+        mMessages.add(makeDummyData("Open jio for Giants game next Saturday!", "Xiao Ming", "0987654321"));
+        mAdapter.notifyDataSetChanged();
+    }
+
+    public static NewsItem makeDummyData(String headline, String reporter, String date) {
+        NewsItem dummy = new NewsItem();
+        dummy.setHeadline(headline);
+        dummy.setReporterName(reporter);
+        dummy.setDate(date);
+        return dummy;
     }
 
     @Override
@@ -295,6 +309,8 @@ public class ContentFragment extends Fragment {
                 public void run() {
                     Toast.makeText(getActivity().getApplicationContext(),
                             R.string.error_connect, Toast.LENGTH_LONG).show();
+                    showDummyData();
+                    Utils.isConnected = false;
                 }
             });
         }

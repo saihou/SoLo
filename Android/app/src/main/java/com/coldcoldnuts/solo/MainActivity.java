@@ -47,9 +47,8 @@ public class MainActivity extends AppCompatActivity
         //update username in drawer
         TextView user = (TextView) navigationView.getHeaderView(0).findViewById(R.id.drawer_name);
         user.setText(Utils.getUsername());
-
         ImageView pic = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.drawer_picture);
-        pic.setImageURI(Utils.getPicture());
+        pic.setImageResource(R.drawable.avatar_placeholder);
     }
 
     @Override

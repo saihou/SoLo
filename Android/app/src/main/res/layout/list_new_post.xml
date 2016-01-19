@@ -27,7 +27,7 @@
         android:layout_centerHorizontal="true"
         android:layout_margin="18dp"
         android:background="#99FFFFFF"
-        android:elevation="10dp"
+        android:elevation="8dp"
         android:gravity="center_vertical"
         android:hint="Where should I go for lunch?"
         android:paddingLeft="5dp"
@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/newpost_text"
         android:layout_below="@+id/newpost_text"
-        android:elevation="20dp"
+        android:elevation="8dp"
         android:padding="10dp"
         android:src="@drawable/ic_add_white_24dp"/>
 

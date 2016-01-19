@@ -109,7 +109,7 @@ public class DetailsActivity extends AppCompatActivity {
         }
 
         final TextView post_reply = (TextView) findViewById(R.id.post_reply);
-        ImageButton sendReply = (ImageButton) findViewById(R.id.send_reply);
+        final ImageButton sendReply = (ImageButton) findViewById(R.id.send_reply);
         sendReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,6 +129,12 @@ public class DetailsActivity extends AppCompatActivity {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(post_reply.getWindowToken(), 0);
                     post_reply.setText("");
+
+                    // if network is not connected i.e. server down
+                    if (!Utils.isConnected) {
+                        mMessages.add(0, ContentFragment.makeDummyData(reply, mUsername, "0000011111"));
+                        mAdapter.notifyDataSetChanged();
+                    }
                 }
             }
         });
