@@ -14,7 +14,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,8 +35,8 @@ public class DetailsActivity extends AppCompatActivity {
     private String mRoomName; // the room for this question
 
     private String mUsername = Utils.getUsername();
-    private ArrayList<NewsItem> mMessages;
-
+    private ArrayList<NewsItem> mMessagesDetail;
+    private JSONObject newData;
     private Socket mSocket;
     {
         try {
@@ -59,14 +58,22 @@ public class DetailsActivity extends AppCompatActivity {
         mQuestion = getIntent().getStringExtra("message");
         mTime = getIntent().getStringExtra("time");
 
-        mMessages = new ArrayList<NewsItem>();
+        mMessagesDetail = new ArrayList<NewsItem>();
 
         ListView lv = (ListView) findViewById(R.id.details_custom_list);
-        mAdapter = new DetailsCustomListAdapter(getApplicationContext(), mMessages);
+        mAdapter = new DetailsCustomListAdapter(getApplicationContext(), mMessagesDetail);
         lv.setAdapter(mAdapter);
 
         // Gives the room a name
         mRoomName = mInitiator + mTime;
+
+        newData = new JSONObject();
+        try {
+            newData.put("username", mUsername);
+            newData.put("room", mRoomName);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         // Topic Question, always on top. Populate it first
         NewsItem question = new NewsItem();
@@ -102,7 +109,6 @@ public class DetailsActivity extends AppCompatActivity {
                 "avatar_female", "drawable", getPackageName() );
         Log.v("checkview", mInitiator);
         if (mInitiator.equals("Jack Ong")) {
-            //profile.setImageResource(resourceIdMale);
             profile.setImageResource(resourceIdMale);
         } else {
             profile.setImageResource(resourceIdFemale);
@@ -132,7 +138,7 @@ public class DetailsActivity extends AppCompatActivity {
 
                     // if network is not connected i.e. server down
                     if (!Utils.isConnected) {
-                        mMessages.add(0, ContentFragment.makeDummyData(reply, mUsername, "0000011111"));
+                        mMessagesDetail.add(0, ContentFragment.makeDummyData(reply, mUsername, "0000011111"));
                         mAdapter.notifyDataSetChanged();
                     }
                 }
@@ -151,30 +157,16 @@ public class DetailsActivity extends AppCompatActivity {
         mSocket.on("left room", onLeftRoom);
         mSocket.connect();
         // join the Initiator's Question room in the socket
-        JSONObject newData = new JSONObject();
-        try {
-            newData.put("username", mUsername);
-            newData.put("room", mRoomName);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
         mSocket.emit("join", newData);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        // clean up mMessages
-        mMessages = new ArrayList<NewsItem>();
+        // clean up mMessagesDetail
+        mMessagesDetail = new ArrayList<NewsItem>();
 
         // Leave the room
-        JSONObject newData = new JSONObject();
-        try {
-            newData.put("username", mUsername);
-            newData.put("room", mRoomName);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
         mSocket.emit("leave", newData);
         Log.v("test onPause detail", newData.toString());
 
@@ -194,43 +186,7 @@ public class DetailsActivity extends AppCompatActivity {
         // disconnect and drop all subscription
     }
 
-    private void populate(JSONArray msgHistory) {
-        int arrSize = msgHistory.length();
-        for (int i = 0; i < arrSize; i++) {
-            try {
-                JSONObject post = msgHistory.getJSONObject(i);
-                String message = post.getString("message");
-                String user = post.getString("username");
-                String currTime = post.getString("time");
-                NewsItem newsData = new NewsItem();
-                newsData.setHeadline(message);
-                newsData.setReporterName(user);
-                newsData.setDate(currTime);
-                mMessages.add(newsData);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        // TODO: implement Adapter
-        mAdapter.notifyDataSetChanged();
-    }
-
-    private void addMsg(JSONObject newMsg) {
-        NewsItem newsData = new NewsItem();
-        try {
-            newsData.setHeadline(newMsg.getString("message"));
-            newsData.setReporterName(newMsg.getString("username"));
-            newsData.setDate(newMsg.getString("time"));
-            mMessages.add(newsData);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        // TODO: implement Adapter
-        mAdapter.notifyDataSetChanged();
-    }
-
     // The various Listener functions
-
     // Handler of connection error, i.e. server not available
     private Emitter.Listener onConnectError = new Emitter.Listener() {
         @Override
@@ -253,34 +209,7 @@ public class DetailsActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     JSONObject data = (JSONObject) args[0];
-                    String username;
-                    String message;
-                    String room;
-                    String currTime;
-                    try {
-                        username = data.getString("username");
-                        message = data.getString("message");
-                        room = data.getString("room");
-                        currTime = data.getString("time");
-                    } catch (JSONException e) {
-                        return;
-                    }
-
-                    if (!room.equals(mRoomName)) {
-                        Log.e("DetailsActivity", "Wrong Room!!");
-                        return;
-                    }
-
-                    JSONObject newMsg = new JSONObject();
-                    try {
-                        newMsg.put("username", username);
-                        newMsg.put("message", message);
-                        newMsg.put("time", currTime);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    Log.v("test onNewMessage", newMsg.toString());
-                    addMsg(newMsg);
+                    Constants.addMsg(data, mMessagesDetail, mAdapter, mRoomName);
                 }
             });
         }
@@ -293,20 +222,7 @@ public class DetailsActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     JSONObject data = (JSONObject) args[0];
-                    String username;
-                    String room;
-                    JSONArray msgHistory;
-                    try {
-                        username = data.getString("username");
-                        room = data.getString("room");
-                        msgHistory = data.getJSONArray("messages");
-                    } catch (JSONException e) {
-                        return;
-                    }
-                    Log.v("test onJoinRoom", msgHistory.toString());
-                    if (username.equals(mUsername)) {
-                        populate(msgHistory);
-                    }
+                    Constants.populate(data, mMessagesDetail, mAdapter, mRoomName, mUsername);
                 }
             });
         }

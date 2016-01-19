@@ -73,17 +73,21 @@ public class DetailsCustomListAdapter extends BaseAdapter {
 
         Resources res = context.getResources();
 
+        holder.reportedChatroomBtn.setVisibility(View.VISIBLE);
+
         int resourceIdMale = res.getIdentifier(
                 "avatar_male", "drawable", context.getPackageName());
         int resourceIdFemale = res.getIdentifier(
                 "avatar_female", "drawable", context.getPackageName() );
-        if (listData.get(position).getReporterName().equals("Jack Ong")) {
+        String reporter = listData.get(position).getReporterName();
+        if (reporter.equals("Jack Ong")) {
             holder.detailProfile.setImageResource(resourceIdMale);
         } else {
             holder.detailProfile.setImageResource(resourceIdFemale);
         }
-        if (listData.get(position).getReporterName().contains(Utils.getUsername())) {
+        if (reporter.contains(Utils.getUsername())) {
             holder.reportedChatroomBtn.setVisibility(View.INVISIBLE);
+        } else {
         }
         holder.messageView.setText(listData.get(position).getHeadline());
         holder.reporterNameView.setText("By, " + listData.get(position).getReporterName());
