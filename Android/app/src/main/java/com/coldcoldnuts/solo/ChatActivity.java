@@ -110,15 +110,17 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
-        mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
-        mSocket.on("send room message", onNewMessage);
-        mSocket.on("joined room", onJoinRoom);
-        mSocket.on("left room", onLeftRoom);
-        mSocket.connect();
+        if (Utils.retry) {
+            mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
+            mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
+            mSocket.on("send room message", onNewMessage);
+            mSocket.on("joined room", onJoinRoom);
+            mSocket.on("left room", onLeftRoom);
+            mSocket.connect();
 
-        // join the private chat room in the socket
-        mSocket.emit("join", newData);
+            // join the private chat room in the socket
+            mSocket.emit("join", newData);
+        }
     }
 
     @Override
@@ -152,6 +154,7 @@ public class ChatActivity extends AppCompatActivity {
                 public void run() {
                     Toast.makeText(getApplicationContext(),
                             R.string.error_connect, Toast.LENGTH_LONG).show();
+                    Utils.increaseRetryCount();
                 }
             });
         }

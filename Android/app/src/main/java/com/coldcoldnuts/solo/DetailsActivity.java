@@ -3,6 +3,7 @@ package com.coldcoldnuts.solo;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -35,6 +36,7 @@ public class DetailsActivity extends AppCompatActivity {
     private String mRoomName; // the room for this question
 
     private String mUsername = Utils.getUsername();
+    private String mTransitionName;
     private ArrayList<NewsItem> mMessagesDetail;
     private JSONObject newData;
     private Socket mSocket;
@@ -57,7 +59,7 @@ public class DetailsActivity extends AppCompatActivity {
         mInitiator = getIntent().getStringExtra("name");
         mQuestion = getIntent().getStringExtra("message");
         mTime = getIntent().getStringExtra("time");
-
+        mTransitionName = getIntent().getStringExtra("transitionName");
         mMessagesDetail = new ArrayList<NewsItem>();
 
         ListView lv = (ListView) findViewById(R.id.details_custom_list);
@@ -80,6 +82,16 @@ public class DetailsActivity extends AppCompatActivity {
         question.setHeadline(mQuestion);
         question.setReporterName(mInitiator);
         View topic = (View) findViewById(R.id.topic);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            topic.setTransitionName(mTransitionName);
+            ImageView background = (ImageView) topic.findViewById(R.id.imageView);
+            int position = Integer.parseInt(mTransitionName.substring(0, 1));
+            CustomListAdapter.setRandomBackground(background, position);
+//            getWindow().setExitTransition(new Fade());
+//            getWindow().setEnterTransition(new Fade());
+//            getWindow().setSharedElementEnterTransition(new Fade());
+//            getWindow().setSharedElementExitTransition(new Fade());
+        }
         TextView topicQuestion = (TextView) topic.findViewById(R.id.title);
         TextView topicChatBtn = (TextView) topic.findViewById(R.id.chatroom_btn);
         topicQuestion.setText(mQuestion);
@@ -108,7 +120,7 @@ public class DetailsActivity extends AppCompatActivity {
         int resourceIdFemale = res.getIdentifier(
                 "avatar_female", "drawable", getPackageName() );
         Log.v("checkview", mInitiator);
-        if (mInitiator.equals("Jack Ong")) {
+        if (mInitiator.equals("Jack Ong") || mInitiator.equals("Xiao Ming")) {
             profile.setImageResource(resourceIdMale);
         } else {
             profile.setImageResource(resourceIdFemale);
@@ -131,16 +143,16 @@ public class DetailsActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    mSocket.emit("room message", confirmPost);
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(post_reply.getWindowToken(), 0);
-                    post_reply.setText("");
-
                     // if network is not connected i.e. server down
                     if (!Utils.isConnected) {
                         mMessagesDetail.add(0, ContentFragment.makeDummyData(reply, mUsername, "0000011111"));
                         mAdapter.notifyDataSetChanged();
+                    } else {
+                        mSocket.emit("room message", confirmPost);
                     }
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(post_reply.getWindowToken(), 0);
+                    post_reply.setText("");
                 }
             }
         });
@@ -150,34 +162,38 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
-        mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
-        mSocket.on("send room message", onNewMessage);
-        mSocket.on("joined room", onJoinRoom);
-        mSocket.on("left room", onLeftRoom);
-        mSocket.connect();
-        // join the Initiator's Question room in the socket
-        mSocket.emit("join", newData);
+        if (Utils.retry) {
+            mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
+            mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
+            mSocket.on("send room message", onNewMessage);
+            mSocket.on("joined room", onJoinRoom);
+            mSocket.on("left room", onLeftRoom);
+            mSocket.connect();
+            // join the Initiator's Question room in the socket
+            mSocket.emit("join", newData);
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        // clean up mMessagesDetail
-        mMessagesDetail = new ArrayList<NewsItem>();
 
-        // Leave the room
-        mSocket.emit("leave", newData);
-        Log.v("test onPause detail", newData.toString());
+        if (Utils.isConnected) {
+            // clean up mMessagesDetail
+            mMessagesDetail = new ArrayList<NewsItem>();
 
-        mSocket.emit("disconnect request");
-        mSocket.disconnect();
-        mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
-        mSocket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
-        mSocket.off("send room message", onNewMessage);
-        mSocket.off("joined room", onJoinRoom);
-        mSocket.off("left room", onLeftRoom);
+            // Leave the room
+            mSocket.emit("leave", newData);
+            Log.v("test onPause detail", newData.toString());
 
+            mSocket.emit("disconnect request");
+            mSocket.disconnect();
+            mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
+            mSocket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
+            mSocket.off("send room message", onNewMessage);
+            mSocket.off("joined room", onJoinRoom);
+            mSocket.off("left room", onLeftRoom);
+        }
     }
 
     @Override
@@ -196,6 +212,7 @@ public class DetailsActivity extends AppCompatActivity {
                 public void run() {
                     Toast.makeText(getApplicationContext(),
                             R.string.error_connect, Toast.LENGTH_LONG).show();
+                    Utils.increaseRetryCount();
                 }
             });
         }

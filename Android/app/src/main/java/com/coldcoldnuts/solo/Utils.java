@@ -20,6 +20,8 @@ public class Utils {
     public static String username = "no username yet";
     public static Uri picture = null;
     public static boolean isConnected = true; //current state of the network,  defaults to true
+    public static int countRetries = 0;
+    public static boolean retry = true;
 
     public static boolean isFacebookLoggedIn() {
         AccessToken token = AccessToken.getCurrentAccessToken();
@@ -64,5 +66,13 @@ public class Utils {
             request.executeAsync();
         }
         return true;
+    }
+
+    public static void increaseRetryCount() {
+        countRetries++;
+        if (countRetries >= 1) {
+            isConnected = false;
+            retry = false;
+        }
     }
 }

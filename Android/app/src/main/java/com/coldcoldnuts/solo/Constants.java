@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * Created by JackOng on 1/16/16.
  */
 public class Constants {
-    public static final String CHAT_SERVER_URL = "http://192.168.1.96:5000/solo";
+    public static final String CHAT_SERVER_URL = "http://192.168.1.79:5000/solo";
     public static final String MAIN_ROOM = "main_room";
     public static void testing() {
         Log.v("testing", "haha");

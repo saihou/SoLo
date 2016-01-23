@@ -1,8 +1,11 @@
 package com.coldcoldnuts.solo;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,14 +57,28 @@ public class CustomListAdapter extends BaseAdapter {
             ImageView background = (ImageView) convertView.findViewById(R.id.imageView);
             setRandomBackground(background, position);
 
+            final View stuff = convertView;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                stuff.setTransitionName(position+"transition");
+            }
             holder.reportedChatroomBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, DetailsActivity.class);
                     intent.putExtra("message", holder.headlineView.getText());
                     intent.putExtra("time", holder.date.getText());
-                    intent.putExtra("name", holder.reporterNameView.getText().toString().substring(4));
-                    context.startActivity(intent);
+                    intent.putExtra("name", holder.reporterNameView.getText().toString());
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                        ((Activity)context).getWindow().setExitTransition(new Fade());
+//                        ((Activity)context).getWindow().setEnterTransition(new Fade());
+                        intent.putExtra("transitionName", stuff.getTransitionName());
+                        ActivityOptions options = ActivityOptions.
+                                makeSceneTransitionAnimation((Activity)context, stuff, stuff.getTransitionName());
+                        context.startActivity(intent, options.toBundle());
+                    } else {
+                        context.startActivity(intent);
+                    }
+
                 }
             });
             convertView.setTag(holder);
@@ -81,7 +98,7 @@ public class CustomListAdapter extends BaseAdapter {
             holder.profilePicView.setImageResource(resourceIdFemale);
         }
         holder.headlineView.setText(listData.get(position).getHeadline());
-        holder.reporterNameView.setText("By, " + listData.get(position).getReporterName());
+        holder.reporterNameView.setText(listData.get(position).getReporterName());
         holder.date.setText(listData.get(position).getDate());
         return convertView;
     }

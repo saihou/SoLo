@@ -75,16 +75,17 @@ public class ContentFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        if (Utils.retry) {
+            mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
+            mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
+            mSocket.on("send room message", onNewMessage);
+            mSocket.on("joined room", onJoinRoom);
+            mSocket.on("left room", onLeftRoom);
+            mSocket.connect();
 
-        mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
-        mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
-        mSocket.on("send room message", onNewMessage);
-        mSocket.on("joined room", onJoinRoom);
-        mSocket.on("left room", onLeftRoom);
-        mSocket.connect();
-
-        // join the room "main_room" in the socket
-        mSocket.emit("join", newData);
+            // join the room "main_room" in the socket
+            mSocket.emit("join", newData);
+        }
 
         Log.v("mainFragment", "start");
     }
@@ -131,16 +132,18 @@ public class ContentFragment extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                mSocket.emit("room message", confirmPost);
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(newPost.getWindowToken(), 0);
-                newPost.setText("");
 
+                Log.v("NETWORK CONNECTED", (Utils.isConnected) ? "Yes" : "No");
                 // if network is not connected i.e. server down
                 if (!Utils.isConnected) {
                     mMessages.add(0, makeDummyData(newPostText, mUsername, "0000011111"));
                     mAdapter.notifyDataSetChanged();
+                } else {
+                    mSocket.emit("room message", confirmPost);
                 }
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(newPost.getWindowToken(), 0);
+                newPost.setText("");
             }
         });
 
@@ -150,17 +153,18 @@ public class ContentFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        mMessages = new ArrayList<NewsItem>();
-        mSocket.emit("leave", newData);
-        Log.v("test onPause main", newData.toString());
-        mSocket.emit("disconnect request");
-        mSocket.disconnect();
-        mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
-        mSocket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
-        mSocket.off("send room message", onNewMessage);
-        mSocket.off("joined room", onJoinRoom);
-        mSocket.off("left room", onLeftRoom);
-
+        if (Utils.isConnected) {
+            mMessages = new ArrayList<NewsItem>();
+            mSocket.emit("leave", newData);
+            Log.v("test onPause main", newData.toString());
+            mSocket.emit("disconnect request");
+            mSocket.disconnect();
+            mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
+            mSocket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
+            mSocket.off("send room message", onNewMessage);
+            mSocket.off("joined room", onJoinRoom);
+            mSocket.off("left room", onLeftRoom);
+        }
         Log.v("mainFragment", "paused");
     }
 
@@ -202,6 +206,7 @@ public class ContentFragment extends Fragment {
                             R.string.error_connect, Toast.LENGTH_LONG).show();
                     showDummyData();
                     Utils.isConnected = false;
+                    Utils.increaseRetryCount();
                 }
             });
         }
