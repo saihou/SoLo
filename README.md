@@ -3,13 +3,13 @@ A combination of the words, "Social" and "Local", SoLo is a location-based mobil
 
 ---
 ####Splash / Login
-![Splash/Login Page](/Images/login.jpg?raw=true)
+<img src=/Images/login.jpg height=500/>
 ---
 ####Global Feed
-![Global Feed Page](/Images/feed.jpg?raw=true)
+<img src=/Images/feed.jpg height=500/>
 ---
 ####Topic
-![Topic](/Images/topic.jpg?raw=true)
+<img src=/Images/topic.jpg height=500/>
 ---
 ####Private Messaging
-![Private Messaging](/Images/private_chat.jpg?raw=true) 
+<img src=/Images/private_chat.jpg height=500/>
